@@ -1,0 +1,11 @@
+-menù con possibilità di creare, eliminare nuove viste/tabelle di progressione FATTO
+-esploratore/editor singola tabella
+FATTO
+-in ognuna permettere di inserire un valore testuale (numerico)
+FATTO
+-ad ogni inserimento, aggiunta alla lista con data recuperata in automatico,
+raggruppate per settimane senza calendario, solo un unica grande lista, ma con dei checkpoint ogni settimana
+FATTO
+RecyclerView_Group)
+-mostrare per ogni vista una serie di statistiche globali come media mensile , mediana settimanale
+-massimo raggiunto, incremento consigliato settimanale

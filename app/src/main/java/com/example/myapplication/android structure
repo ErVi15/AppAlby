@@ -1,0 +1,5 @@
+l'adapter serve neccessariamente per gestire il recycler view
+il fragment è un oggetto generico ma nel mio caso deve gestire la logica dell'ui, come dialog, pulsanti, e chiamare l'adapter
+il viewmodel gestisce i dati, ad esempio dal database, oppure le conversioni a tipi convenienti (per esempio il mio adapter appiattisce una map, piu comoda per la visualzizaione)
+data contiene le classi che si interfacciano con il database i dao ecc..
+domain la logica pura di business, no ui, solo manipolazione dati, ad esempio la mia classe che intepreta le statistiche per ottener eun feedback
