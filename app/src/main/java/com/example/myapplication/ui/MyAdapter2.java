@@ -1,6 +1,7 @@
 package com.example.myapplication.ui;
 
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,10 +11,12 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.ProgressionEntry;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static final int TYPE_DAY = 0;
@@ -29,7 +32,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         this.items = new ArrayList<>();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
             this.items.add(new DayItem(entry.getKey()));// aggiungi la chiave
-            for (String e : entry.getValue()) {
+            for ( String e: entry.getValue() ) {
                 items.add(new EntryItem(e, entry.getKey()));
             }
         }
@@ -75,6 +78,16 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         return items.get(position).getType();
     }
 
+    private static int getRealPosition(List<ListItem> items, int adapterPosition) {
+        int realPos = 0;
+        for (int i = 0; i < adapterPosition; i++) {
+            if (items.get(i).getType() == ListItem.TYPE_ENTRY) {
+                realPos++;
+            }
+        }
+        return realPos;
+    }
+
 
 
     public void addElement(Map<String, List<String> > map){
@@ -86,14 +99,24 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 items.add(new EntryItem(e, entry.getKey()));         // aggiungi tutti i valori
             }
         }
+        Log.d("ADAPTER", "Adapter items: " + items.stream()
+                .map(Object::toString)
+                .collect(Collectors.joining(", ")));
+
         notifyDataSetChanged();
+
     }
 
 
 
     public interface OnItemDeleteListener {
-        void onDeleteItem(EntryItem item);
+        void onDeleteItem(String day, int position);
     }
+
+//questo non va usato nel modello architetturale mvvn: l'adapter non deve conoscere dati del repo. L'id lo conoscerà il viewmodel
+//    public interface OnItemDeleteListener {
+//        void onDeleteItem(long id);
+//    }
 
 
     static class DayViewHolder extends RecyclerView.ViewHolder {
@@ -120,10 +143,13 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             btnDelete.setOnClickListener(v -> {
                 int posiz=getAdapterPosition();
                 if (posiz != RecyclerView.NO_POSITION) {
-                    listener.onDeleteItem((EntryItem) items.get(posiz));
+                    EntryItem item = (EntryItem) items.get(posiz);
+                    int real_posiz=getRealPosition(items, posiz);
+                    listener.onDeleteItem(item.getDay(), real_posiz);
                 }
             });
         }
+
     }
 
     abstract class ListItem {
@@ -152,23 +178,24 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    class EntryItem extends ListItem{
-
+    class EntryItem extends ListItem {
+        long id;
         String day;
-        EntryItem(String string, String day) {
-            super(string);
-            this.day=day;
+
+        EntryItem( String value, String day) {
+            super(value);
+            this.day = day;
         }
+
+        long getId() { return id; }
+        String getDay() { return day; }
 
         @Override
         int getType() {
             return TYPE_ENTRY;
         }
-        String getDay(){
-            return this.day;
-        }
-
     }
+
 
 
 }

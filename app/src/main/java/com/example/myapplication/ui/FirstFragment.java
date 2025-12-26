@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
+import com.example.myapplication.data.Progression;
 import com.example.myapplication.databinding.FragmentFirstBinding;
 import com.example.myapplication.viewmodel.ProgressionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -49,17 +50,29 @@ public class FirstFragment extends Fragment {
         recyclerView = view.findViewById(R.id.myRecyclerView);
 
         //questa lista ogni votla che cambi pagina si perde andrebbe spostata in create view
-        viewModel = new ViewModelProvider(this).get(ProgressionViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProgressionViewModel.class);
 
-        adapter = new MyAdapter(new ArrayList<>(), position -> {
-            // Logica per cambiare vista
-            NavHostFragment.findNavController(FirstFragment.this)
-                    .navigate(R.id.action_FirstFragment_to_SecondFragment);
+        adapter = new MyAdapter(new MyAdapter.OnItemButtonClickListener() {
+            @Override
+            public void onDeleteClick(Progression progression) {
+                viewModel.deleteProgression(progression); // delega a ViewModel -> Repository -> Room
+            }
+
+            @Override
+            public void onChangeViewClick(Progression progression) {
+                // Passando anche l'ID della Progression come argomento
+                Bundle bundle = new Bundle();
+                bundle.putLong("progressionId", progression.id);
+
+                NavHostFragment.findNavController(FirstFragment.this)
+                        .navigate(R.id.action_FirstFragment_to_SecondFragment, bundle);
+            }
+
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
 
-        viewModel.getListData().observe(getViewLifecycleOwner(), list -> {
+        viewModel.getAllProgression().observe(getViewLifecycleOwner(), list -> {
             adapter.setList(list); // aggiorna RecyclerView
         });
 
@@ -91,7 +104,8 @@ public class FirstFragment extends Fragment {
                 .setView(input)
                 .setPositiveButton("OK", (dialog, which) -> {
                     String testo = input.getText().toString();
-                    this.viewModel.addValueList(testo);
+                    //this.viewModel.addValueList(testo);
+                    this.viewModel.addProgression(testo);
                     //dovresti aggiornare la lista anche qui nel firstFragment e non lo fai
                     //adapter.addElement(testo); // Adapter aggiorna la lista e la RecyclerView
                 })
@@ -102,8 +116,8 @@ public class FirstFragment extends Fragment {
 
     }
 
-    public void removeItem(int position) {
-        this.viewModel.removeValueList(position);
+    public void removeItem(Progression p) {
+        this.viewModel.deleteProgression(p);
         //adapter.removeElement(position); // Adapter aggiorna la lista e la RecyclerView
     }
 

@@ -7,5 +7,6 @@ FATTO
 raggruppate per settimane senza calendario, solo un unica grande lista, ma con dei checkpoint ogni settimana
 FATTO
 RecyclerView_Group)
+-la lista viene salvata in un database room, per non perdere memoria ad ogni avvio
 -mostrare per ogni vista una serie di statistiche globali come media mensile , mediana settimanale
 -massimo raggiunto, incremento consigliato settimanale

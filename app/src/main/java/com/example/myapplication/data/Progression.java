@@ -14,5 +14,8 @@ public class Progression {
     @NonNull
     public String name;
 
+    public Progression(@NonNull String name) {
+        this.name = name;
+    }
 }
 

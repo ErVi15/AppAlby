@@ -9,15 +9,17 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
+import com.example.myapplication.data.Progression; // Assumendo il tuo entity
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
-    private OnItemButtonClickListener listener; //listener dinamico per il bottone Modifica che avrà ogni oggetto della lista
-    private List<String> items;
 
-    public MyAdapter(List<String> items,OnItemButtonClickListener listener) {
-        this.items = items;
+    private OnItemButtonClickListener listener;
+    private List<Progression> items = new ArrayList<>();
+
+    public MyAdapter(OnItemButtonClickListener listener) {
         this.listener = listener;
     }
 
@@ -28,8 +30,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public MyViewHolder(View itemView) {
             super(itemView);
             text = itemView.findViewById(R.id.itemText);
-            button1=itemView.findViewById(R.id.itemButton); //button Elimina
-            button2=itemView.findViewById(R.id.itemButton2); //button Modifica
+            button1 = itemView.findViewById(R.id.itemButton); // Elimina
+            button2 = itemView.findViewById(R.id.itemButton2); // Modifica
         }
     }
 
@@ -42,15 +44,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
-        holder.text.setText(items.get(position));
+        Progression progression = items.get(position);
+        holder.text.setText(progression.name);
 
         holder.button1.setOnClickListener(v -> {
-            removeElement(position);
+            if (listener != null) {
+                listener.onDeleteClick(progression); // Passiamo l’oggetto al fragment
+            }
         });
 
         holder.button2.setOnClickListener(v -> {
-            if(listener != null) {
-                listener.onChangeViewClick(position); // Notifica il Fragment
+            if (listener != null) {
+                listener.onChangeViewClick(progression); // Passiamo l’oggetto al fragment
             }
         });
     }
@@ -60,34 +65,18 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         return items.size();
     }
 
-    public void addElement(String stringa){
-        items.add(stringa);
-        notifyItemInserted(items.size() - 1);
-    }
-
-
-    public void removeElement(int position){
-        items.remove(position);
-        notifyItemRemoved(position);
-
-    }
-
-    public void setList(List<String> newList) {
+    public void setList(List<Progression> newList) {
         this.items.clear();
-        this.items.addAll(newList);
+        if(newList != null) {
+            this.items.addAll(newList);
+        }
         notifyDataSetChanged();
     }
 
-    public void showElements(){
-        System.out.println("La lista contiene attualmente i seguenti: ");
-        for(String e: items ){
-            System.out.println(e);
-        }
-    }
-
-
     public interface OnItemButtonClickListener {
-        void onChangeViewClick(int position); // o String item se vuoi
+        void onDeleteClick(Progression progression); // Nuovo metodo per eliminare
+        void onChangeViewClick(Progression progression); // Modifica
     }
-}
 
+
+}

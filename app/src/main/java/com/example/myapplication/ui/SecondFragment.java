@@ -43,7 +43,7 @@ public class SecondFragment extends Fragment {
 
     private ProgressionViewModel viewModel;
 
-
+    private long currentId;
 
 
     @Override
@@ -60,11 +60,12 @@ public class SecondFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+
         //lista item
 
         recyclerView = view.findViewById(R.id.myRecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        viewModel = new ViewModelProvider(this).get(ProgressionViewModel.class);
+        viewModel = new ViewModelProvider(requireActivity()).get(ProgressionViewModel.class);
 
 
         //listener per cancellare l'entry
@@ -75,12 +76,27 @@ public class SecondFragment extends Fragment {
 
         viewModel.getUiData().observe(getViewLifecycleOwner(), map -> {
             adapter.addElement(map); // aggiorna RecyclerView
+            viewModel.printUiIds();
         });
 
         binding.buttonSecond.setOnClickListener(v ->
                 NavHostFragment.findNavController(SecondFragment.this)
                         .navigate(R.id.action_SecondFragment_to_FirstFragment)
         );
+
+        viewModel.debugLogEntryIds();
+
+//questa parte recupera l'id indicato dal firstfragment quando ha richiesto di passare al secondfragment e
+// lo usi per recueprare con una chiamata al repo i dati con quell id
+        currentId = getArguments() != null ? getArguments().getLong("progressionId") : -1;
+
+        //questo dice al viewmodel che progression è stata seleziona ora
+        //questo carica le entries visivamente
+        viewModel.loadIdOfSelectedProgression(currentId);
+        if (currentId != -1) {
+            viewModel.loadEntriesForProgression(currentId); // metodo da implementare
+        }
+
     }
 
     @Override
@@ -99,7 +115,8 @@ public class SecondFragment extends Fragment {
                 .setPositiveButton("OK", (dialog, which) -> {
 
                     String testo = input.getText().toString();
-                    this.viewModel.addValueToMap(testo); //aggiorno la mappa in viewModel
+                    this.viewModel.addEntry(currentId, Integer.parseInt(testo)); //aggiorno la mappa in viewModel
+
 
                 })
                 .setNegativeButton("Annulla", (dialog, which) -> {
@@ -117,12 +134,21 @@ public class SecondFragment extends Fragment {
         ((MainActivity) requireActivity()).setFabAction(this::addNewItem);
     }
 
-    public void removeItem(MyAdapter2.EntryItem item) {
-        String day=item.getDay();
-        String value=item.getString();
-        viewModel.removeValue(day, value);
+//    public void removeItem(MyAdapter2.EntryItem item) {
+//        String day=item.getDay();
+//        String value=item.getString();
+//        viewModel.deleteEntry(day, Integer.parseInt(value));
+//
+//    }
 
+//    public void removeItem(long id) {
+//        viewModel.deleteEntry(id);
+//    }
+
+    public void removeItem(String day, int position) {
+        viewModel.deleteEntry(day, position);
     }
+
 
 
 

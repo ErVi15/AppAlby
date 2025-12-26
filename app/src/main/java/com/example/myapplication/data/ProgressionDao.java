@@ -1,5 +1,6 @@
 package com.example.myapplication.data;
 
+import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
@@ -29,11 +30,10 @@ public interface ProgressionDao {
 
     // Ottieni tutte le progressioni ordinate per nome
     @Query("SELECT * FROM progressions ORDER BY name ASC")
-    List<Progression> getAll();
+    LiveData<List<Progression>> getAll();
 
-    // Ottieni una Progression tramite ID
     @Query("SELECT * FROM progressions WHERE id = :id")
-    Progression getById(long id);
+    Progression getByIdLive(long id);
 
     // Cancella una Progression tramite ID
     @Query("DELETE FROM progressions WHERE id = :id")
