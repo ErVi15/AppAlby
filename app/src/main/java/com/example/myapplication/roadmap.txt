@@ -8,5 +8,8 @@ raggruppate per settimane senza calendario, solo un unica grande lista, ma con d
 FATTO
 RecyclerView_Group)
 -la lista viene salvata in un database room, per non perdere memoria ad ogni avvio
+FATTO
+-implementare nel package feedback.FeedbackEvaluator l'algoritmo di scelta del consiglio da dare in base all'instanza progressFeedBack
+-risolvere limplementazione del bottosheetdialog in app/src/main/res/layout/bottomsheet_feedback.xml (è un normale layout)
 -mostrare per ogni vista una serie di statistiche globali come media mensile , mediana settimanale
 -massimo raggiunto, incremento consigliato settimanale
