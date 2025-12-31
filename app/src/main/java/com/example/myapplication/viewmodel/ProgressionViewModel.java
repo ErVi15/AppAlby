@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.data.Progression;
 import com.example.myapplication.data.ProgressionEntry;
 import com.example.myapplication.data.ProgressionRepository;
+import com.example.myapplication.domain.feedback.FeedbackEvaluator;
+import com.example.myapplication.domain.feedback.ProgressFeedback;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -39,12 +41,15 @@ public class ProgressionViewModel extends AndroidViewModel {
     private final MutableLiveData<Long> selectedProgressionId =
             new MutableLiveData<>();
 
+    private FeedbackEvaluator feedback;
+
 
     public ProgressionViewModel(@NonNull Application application) {
         super(application);
         repository = new ProgressionRepository(application);
         progression = repository.getAllProgressions();
         progression_entry=repository.getAllEntries();
+        feedback=new FeedbackEvaluator();
 
 
         //transformation.map attiva un lstener  che ogni volta che il primo argomento indicato viene invocato, lui fa una trasformazione prima di passarlo
@@ -177,6 +182,22 @@ public class ProgressionViewModel extends AndroidViewModel {
 
     //METODI DI MANIPOLAZIONE DEI DATI
 
+    private TreeMap<Date, List<String>> buildValueMap(
+            List<ProgressionEntry> entries,
+            long progressionId
+    ) {
+        TreeMap<Date, List<String>> valueMap = new TreeMap<>();
+
+        for (ProgressionEntry p : entries) {
+            if (p.progressionId != progressionId) continue;
+
+            valueMap
+                    .computeIfAbsent(p.date, d -> new ArrayList<>())
+                    .add(String.valueOf(p.value));
+        }
+
+        return valueMap;
+    }
 
 
     public TreeMap<String, List<String>> convertToAdapterFormat(TreeMap<Date, List<String>> target) {
@@ -201,6 +222,26 @@ public class ProgressionViewModel extends AndroidViewModel {
 
         return newMap;
     }
+
+    public TreeMap<Date, List<String>> convertFromAdapterFormat(
+            TreeMap<String, List<String>> target
+    ) {
+        TreeMap<Date, List<String>> newMap = new TreeMap<>();
+
+        for (Map.Entry<String, List<String>> entry : target.entrySet()) {
+
+            String dateString = entry.getKey();
+            List<String> values = entry.getValue();
+
+            Date dateKey = parseDateWithoutTime(dateString);
+
+            newMap.computeIfAbsent(dateKey, d -> new ArrayList<>())
+                    .addAll(values);
+        }
+
+        return newMap;
+    }
+
 
     private Map<String, List<Long>> convertIdsToAdapterFormat(
             Map<Date, List<Long>> target) {
@@ -266,6 +307,31 @@ public class ProgressionViewModel extends AndroidViewModel {
             Log.d("UI_IDS", e.getKey() + " -> " + e.getValue());
         }
     }
+
+    private ProgressFeedback getFeedback(){
+        TreeMap<String, List<String>> map = uiData.getValue();
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+        return feedback.getFeedback(convertFromAdapterFormat(map), false);
+    }
+
+    private ProgressFeedback getFeedbackLastWeek(){
+        TreeMap<String, List<String>> map = uiData.getValue();
+        if (map == null || map.isEmpty()) {
+            return null;
+        }
+        return feedback.getFeedback(convertFromAdapterFormat(map), true);
+    }
+
+    public ProgressFeedback getFinalFeedback(){
+        ProgressFeedback this_week_fb=getFeedback();
+        ProgressFeedback second_last_week_fb=getFeedbackLastWeek();
+        feedback.setProgressState(this_week_fb, second_last_week_fb); //imposta stato e descrizione nell-ogetto ProgressFeedback
+        return this_week_fb;
+
+    }
+
 
 
 }

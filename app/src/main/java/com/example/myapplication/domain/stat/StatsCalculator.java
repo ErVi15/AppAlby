@@ -13,18 +13,31 @@ public class StatsCalculator {
 //FUNCTION ON TreeMap<Date, List<String>>
 
     // ottieni gli ultimi 7 giorni di valori
-    public TreeMap<Date, List<String>> cutLast7Days(TreeMap<Date, List<String>> map){
+    public TreeMap<Date, List<String>> cutLast7Days(TreeMap<Date, List<String>> map, boolean is_second_last){
         //Date data =map.lastKey(); //data piu recente
-        Date data = getTime(); //data odierna
-
+        Date today = getTime(); //data odierna
+        Date to;
+        Date from;
         //data sette giorni prima, il massimo oltre cui non prendere piu entries
         Calendar cal=Calendar.getInstance();
-        cal.setTime(data);
-        cal.add(Calendar.DAY_OF_MONTH, -7);
-        Date data_sette_giorni_prima = cal.getTime();
+        cal.setTime(today);
 
+        if (!is_second_last) {
+            // ultima settimana: [oggi-7 → oggi]
+            to = today;
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            from = cal.getTime();
+        } else {
+            // penultima settimana: [oggi-14 → oggi-7]
+            to = today;
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            to = cal.getTime();
+
+            cal.add(Calendar.DAY_OF_MONTH, -7);
+            from = cal.getTime();
+        }
         //Lista delle entries negli ultimi sette giorni
-        return (TreeMap<Date,List<String>>) map.tailMap(data_sette_giorni_prima);
+        return new TreeMap<>(map.subMap(from, to));
     }
 
     public TreeMap<Date, Integer> calculateMeanOfDays(

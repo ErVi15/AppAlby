@@ -31,10 +31,6 @@ public class ProgressionEntry {
 
     public int value; // ripetizioni, bpm, peso, ecc.
 
-//    public ProgressionEntry(Date date, int value) {
-//        this.date=date;
-//        this.value=value;
-//    }
 
     public ProgressionEntry() {}
 

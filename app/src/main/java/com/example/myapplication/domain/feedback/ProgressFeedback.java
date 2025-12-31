@@ -9,12 +9,18 @@ public class ProgressFeedback {
     private float costanza;
 
     private ProgressState state;
+    private String desc;
 
     public ProgressFeedback(float stabilità, float costanza, int mediana, int week_max) {
         this.stabilità = stabilità;
         this.costanza=costanza;
         this.mediana=mediana;
         this.week_max=week_max;
+        this.desc="empty description";
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     public ProgressState getState() {
@@ -23,6 +29,7 @@ public class ProgressFeedback {
 
     public void setState(ProgressState state) {
         this.state = state;
+        this.desc=state.getDescription();
     }
 
     public int getMediana(){

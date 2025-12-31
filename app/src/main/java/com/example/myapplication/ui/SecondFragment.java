@@ -79,10 +79,10 @@ public class SecondFragment extends Fragment {
             viewModel.printUiIds();
         });
 
-        binding.buttonSecond.setOnClickListener(v ->
-                NavHostFragment.findNavController(SecondFragment.this)
-                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
-        );
+//        binding.buttonSecond.setOnClickListener(v ->
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
+//        );
 
         viewModel.debugLogEntryIds();
 
