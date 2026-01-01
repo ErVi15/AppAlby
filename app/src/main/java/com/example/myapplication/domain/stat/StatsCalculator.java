@@ -27,6 +27,7 @@ public class StatsCalculator {
             to = today;
             cal.add(Calendar.DAY_OF_MONTH, -7);
             from = cal.getTime();
+            System.out.println("from date "+ from + "to date "+to);
         } else {
             // penultima settimana: [oggi-14 → oggi-7]
             to = today;
@@ -37,11 +38,12 @@ public class StatsCalculator {
             from = cal.getTime();
         }
         //Lista delle entries negli ultimi sette giorni
-        return new TreeMap<>(map.subMap(from, to));
+        return new TreeMap<>(map.subMap(from, false, to, true));
     }
 
     public TreeMap<Date, Integer> calculateMeanOfDays(
             TreeMap<Date, List<String>> map) {
+
 
         TreeMap<Date, Integer> newmap=new TreeMap<>();
 
@@ -57,8 +59,14 @@ public class StatsCalculator {
 
     // fa la mediana su una mappa di date, ritornano interi
     public Integer calculateMedianOnMap(TreeMap<Date, Integer> map) {
-        List<Integer> mapInteger = new ArrayList<>(map.values());
-        return median(mapInteger);
+        if(map.isEmpty() || map==null){
+            return 0;
+        }
+        else{
+            List<Integer> mapInteger = new ArrayList<>(map.values());
+            return median(mapInteger);
+        }
+
     }
 
     public Integer calculateDays(TreeMap<Date, Integer> map) {

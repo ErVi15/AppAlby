@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,7 +18,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.myapplication.MainActivity;
 import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentSecondBinding;
+import com.example.myapplication.domain.feedback.ProgressFeedback;
 import com.example.myapplication.viewmodel.ProgressionViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -79,10 +82,6 @@ public class SecondFragment extends Fragment {
             viewModel.printUiIds();
         });
 
-//        binding.buttonSecond.setOnClickListener(v ->
-//                NavHostFragment.findNavController(SecondFragment.this)
-//                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
-//        );
 
         viewModel.debugLogEntryIds();
 
@@ -96,6 +95,66 @@ public class SecondFragment extends Fragment {
         if (currentId != -1) {
             viewModel.loadEntriesForProgression(currentId); // metodo da implementare
         }
+
+        //        binding.buttonSecond.setOnClickListener(v ->
+//                NavHostFragment.findNavController(SecondFragment.this)
+//                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
+//        );
+
+        /*
+        viewModel.getFinalFeedback().observe(getViewLifecycleOwner(), feedback -> {
+        View indicator = feedbackButton.findViewById(R.id.view_feedback_indicator);
+        int color;
+        switch (feedback.getState()) {
+            case HEALTHY:
+                color = Color.GREEN;
+                break;
+            case SLOW:
+                color = Color.YELLOW;
+                break;
+            case PLATEAU:
+            default:
+                color = Color.RED;
+        }
+        indicator.setBackgroundColor(color);
+        });
+        */
+
+
+        binding.buttonSecond.setOnClickListener(v -> {
+            ProgressFeedback feedback = viewModel.getFinalFeedback();
+            if (feedback == null) return;
+
+            // Creo il BottomSheetDialog
+            BottomSheetDialog bottomSheet = new BottomSheetDialog(requireContext());
+
+            // Inflato il layout
+            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottomsheet_feedback, null);
+
+            // Popolo le TextView
+            TextView textState = bottomSheetView.findViewById(R.id.text_feedback_state);
+            TextView textDescription = bottomSheetView.findViewById(R.id.text_feedback_description);
+            TextView textSuggestion = bottomSheetView.findViewById(R.id.text_feedback_suggestion);
+            // valori numerici
+            TextView textStabilita = bottomSheetView.findViewById(R.id.text_stabilita);
+            TextView textMediana = bottomSheetView.findViewById(R.id.text_mediana);
+            TextView textWeekMax = bottomSheetView.findViewById(R.id.text_week_max);
+            TextView textCostanza = bottomSheetView.findViewById(R.id.text_costanza);
+
+
+            textState.setText(feedback.getState().name().replace("_", " "));
+            textDescription.setText(feedback.getState().getDescription());
+            textSuggestion.setText(feedback.getState().getSugguestion());
+            textStabilita.setText(String.valueOf((int) Math.round(feedback.getStabilità()*100))+"%");
+            textMediana.setText(String.valueOf(feedback.getMediana()));
+            textWeekMax.setText(String.valueOf(feedback.getWeekMax()));
+            textCostanza.setText(String.valueOf((int) Math.round(feedback.getCostanza()*100))+"%");
+
+
+            // Imposto il contenuto e mostro
+            bottomSheet.setContentView(bottomSheetView);
+            bottomSheet.show();
+        });
 
     }
 
