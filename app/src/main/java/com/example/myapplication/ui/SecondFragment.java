@@ -1,12 +1,14 @@
 package com.example.myapplication.ui;
 
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +22,10 @@ import com.example.myapplication.R;
 import com.example.myapplication.databinding.FragmentSecondBinding;
 import com.example.myapplication.domain.feedback.ProgressFeedback;
 import com.example.myapplication.viewmodel.ProgressionViewModel;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.LineData;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
@@ -96,30 +102,6 @@ public class SecondFragment extends Fragment {
             viewModel.loadEntriesForProgression(currentId); // metodo da implementare
         }
 
-        //        binding.buttonSecond.setOnClickListener(v ->
-//                NavHostFragment.findNavController(SecondFragment.this)
-//                        .navigate(R.id.action_SecondFragment_to_FirstFragment)
-//        );
-
-        /*
-        viewModel.getFinalFeedback().observe(getViewLifecycleOwner(), feedback -> {
-        View indicator = feedbackButton.findViewById(R.id.view_feedback_indicator);
-        int color;
-        switch (feedback.getState()) {
-            case HEALTHY:
-                color = Color.GREEN;
-                break;
-            case SLOW:
-                color = Color.YELLOW;
-                break;
-            case PLATEAU:
-            default:
-                color = Color.RED;
-        }
-        indicator.setBackgroundColor(color);
-        });
-        */
-
 
         binding.buttonSecond.setOnClickListener(v -> {
             ProgressFeedback feedback = viewModel.getFinalFeedback();
@@ -143,12 +125,54 @@ public class SecondFragment extends Fragment {
 
 
             textState.setText(feedback.getState().name().replace("_", " "));
+            switch(feedback.getState()) {
+                case ALLENAMENTO_IRREGOLARE:
+                case SOVRACCARICO_STASI:
+                case POTENZIALE_NON_CONSOLIDATO:
+                    textState.setTextColor(Color.YELLOW);
+                    break;
+                case PROGRESSO_SANO:
+                    textState.setTextColor(Color.GREEN);
+                    break;
+                case REGRESSIONE:
+                    textState.setTextColor(Color.RED);
+                    break;
+                case AGGIUNGI_ALTRI_GIORNI:
+                case RIPRESA_DOPO_PAUSA:
+                    textState.setTextColor(Color.CYAN);
+                    break;
+            }
+
             textDescription.setText(feedback.getState().getDescription());
             textSuggestion.setText(feedback.getState().getSugguestion());
             textStabilita.setText(String.valueOf((int) Math.round(feedback.getStabilità()*100))+"%");
             textMediana.setText(String.valueOf(feedback.getMediana()));
             textWeekMax.setText(String.valueOf(feedback.getWeekMax()));
             textCostanza.setText(String.valueOf((int) Math.round(feedback.getCostanza()*100))+"%");
+
+
+            LineChart lineChart = bottomSheetView.findViewById(R.id.lineChart);
+            XAxis xAxis = lineChart.getXAxis();
+            xAxis.setGranularity(1f);              // passo minimo = 1
+            xAxis.setGranularityEnabled(true);     // forza l'uso della granularità
+            xAxis.setAxisMinimum(1f); //fa partire l'asse orizzontale da 1
+            xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //mette l'ascissa sotto
+            YAxis leftAxis = lineChart.getAxisLeft();
+            YAxis rightAxis =  lineChart.getAxisRight();
+
+
+            rightAxis.setEnabled(false);   // disabilita asse destro
+
+            leftAxis.setSpaceTop(20f); // percentuale di spazio
+            leftAxis.setEnabled(true);     // esplicito, per chiarezza
+
+
+
+            LineData lineData = new LineData(viewModel.getDataSetForChart()[0], viewModel.getDataSetForChart()[1]);
+            lineChart.setData(lineData);
+            lineChart.invalidate(); // serve per ridisegnare il grafico
+            lineChart.getDescription().setEnabled(false);
+            lineChart.getLegend().setTextSize(12f);
 
 
             // Imposto il contenuto e mostro
@@ -169,12 +193,17 @@ public class SecondFragment extends Fragment {
 
         new AlertDialog.Builder(requireContext()) //pop up box in cui inserire l'input receiver preparato prima
                 //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
-                .setTitle("Nome nuovo elemento")
+                .setTitle("Valore")
                 .setView(input)
                 .setPositiveButton("OK", (dialog, which) -> {
 
                     String testo = input.getText().toString();
-                    this.viewModel.addEntry(currentId, Integer.parseInt(testo)); //aggiorno la mappa in viewModel
+                    try{
+                        this.viewModel.addEntry(currentId, Integer.parseInt(testo)); //aggiorno la mappa in viewModel
+                    } catch(NumberFormatException e){
+                        Toast.makeText(requireContext(), "Valore non valido (inserisci numeri interi)", Toast.LENGTH_SHORT).show();
+                    }
+
 
 
                 })

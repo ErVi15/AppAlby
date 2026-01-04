@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
@@ -39,6 +40,49 @@ public class StatsCalculator {
         }
         //Lista delle entries negli ultimi sette giorni
         return new TreeMap<>(map.subMap(from, false, to, true));
+    }
+
+    public ArrayList<TreeMap<Date, List<String>>> splitMapBy7Days(TreeMap<Date, List<String>> map) {
+        ArrayList<TreeMap<Date, List<String>>> result = new ArrayList<>();
+        if (map.isEmpty()) return result;
+
+        Calendar cal = Calendar.getInstance();
+        Date to = map.lastKey();
+        cal.setTime(to); //ultima data inserita segnata, e aggiornata su calendar
+        cal.add(Calendar.DAY_OF_MONTH, -7); //calcolo la data di sette giorni prima
+        Date from = cal.getTime(); // imposto la data di inizio intervallo
+        //strutture di appoggio
+        TreeMap<Date, List<String>> weekMap=new TreeMap<>();
+        Iterator<Map.Entry<Date, List<String>>> iter = map.descendingMap().entrySet().iterator();
+
+        while(iter.hasNext() && result.size()<=26){ //mostra massimo 6 mesi
+            Map.Entry<Date,List<String>> element=iter.next();
+            if(!element.getKey().before(from)){
+                weekMap.put(element.getKey(), element.getValue());
+                iter.remove();
+            } else{
+                result.add(new TreeMap<>(weekMap));
+                weekMap.clear();
+
+                to=from;
+                cal.setTime(from);
+                cal.add(Calendar.DAY_OF_MONTH, -7);
+                from=cal.getTime();
+
+                //l'elemento finale non è incluso dall'if, e finisce qui
+                if (!element.getKey().before(from)) {
+                    weekMap.put(element.getKey(), element.getValue());
+                    iter.remove();
+                }
+            }
+
+            if (!weekMap.isEmpty()) {
+                result.add(new TreeMap<>(weekMap));
+            }
+        }
+
+
+        return result;
     }
 
     public TreeMap<Date, Integer> calculateMeanOfDays(

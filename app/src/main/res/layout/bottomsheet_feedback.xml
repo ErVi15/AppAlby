@@ -5,35 +5,249 @@
     android:orientation="vertical"
     android:padding="20dp">
 
-    <!-- Titolo stato (enum ripulito) -->
+    <!-- BLOCCO STATISTICHE -->
+
+    <!-- Titolo sezione -->
     <TextView
-        android:id="@+id/text_feedback_state"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="PROGRESSO SANO"
+        android:text="ULTIMI SETTE GIORNI"
         android:textAllCaps="true"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:textSize="12sp"
         android:letterSpacing="0.05"
         android:layout_marginBottom="8dp" />
 
-    <!-- Descrizione -->
-    <TextView
-        android:id="@+id/text_feedback_description"
+    <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stai spingendo e assimilando: apprendimento corretto."
-        android:textSize="15sp"
-        android:layout_marginBottom="12dp" />
+        android:columnCount="2"
+        android:rowCount="2"
+        android:useDefaultMargins="true">
+        <!-- Mediana -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:orientation="horizontal"
+            android:padding="12dp">
 
-    <!-- Suggerimento -->
-    <TextView
-        android:id="@+id/text_feedback_suggestion"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Suggerimento: continua così."
-        android:textSize="15sp"
-        android:layout_marginBottom="16dp" />
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Valore tipico"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="rappresenta mediamente cosa aspettarti"
+                    android:textSize="11sp"
+                    android:alpha="0.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/text_mediana"
+                    android:text="7"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text=" "
+                    android:textSize="11sp"
+                    android:alpha="0.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Max settimanale -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Record ultimi 7 giorni"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="picco recente"
+                    android:textSize="11sp"
+                    android:alpha="0.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/text_week_max"
+                    android:text="9"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text=" "
+                    android:textSize="11sp"
+                    android:alpha="0.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Stabilità -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Solidità"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="quanto ti avvicini tipicamente al tuo massimo degli ultimi 7 giorni"
+                    android:textSize="11sp"
+                    android:alpha="0.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/text_stabilita"
+                    android:text="0.78"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="rif. ≥ 65%"
+                    android:textSize="11sp"
+                    android:alpha="0.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Costanza -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:text="Costanza"
+                    android:textSize="13sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="su 7 giorni quanti sei stato attivo"
+                    android:textSize="11sp"
+                    android:alpha="0.7"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="end">
+
+                <TextView
+                    android:id="@+id/text_costanza"
+                    android:text="0.29"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+
+                <TextView
+                    android:text="rif. ≥ 30%"
+                    android:textSize="11sp"
+                    android:alpha="0.6"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    />
+            </LinearLayout>
+        </LinearLayout>
+
+    </GridLayout>
 
     <!-- Separatore -->
     <View
@@ -42,225 +256,89 @@
         android:layout_marginBottom="16dp"
         android:background="?attr/colorOutline" />
 
-    <!-- BLOCCO STATISTICHE -->
+    <!-- BLOCCO CONFRONTO -->
 
-    <!-- Mediana -->
-    <LinearLayout
+    <!-- Titolo sezione -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
+        android:text="CONFRONTO CON 7 GIORNI FA"
+        android:textAllCaps="true"
+        android:textSize="12sp"
+        android:letterSpacing="0.05"
+        android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Valore tipico"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="rappresenta mediamente cosa aspettarti"
-                android:textSize="11sp"
-                android:alpha="0.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
-
-            <TextView
-                android:id="@+id/text_mediana"
-                android:text="7"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text=" "
-                android:textSize="11sp"
-                android:alpha="0.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Max settimanale -->
     <LinearLayout
+        android:id="@+id/section_compare"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="0dp"
+        <!-- Titolo stato (enum ripulito) -->
+        <TextView
+            android:id="@+id/text_feedback_state"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+            android:text="PROGRESSO SANO"
+            android:textAllCaps="true"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="8dp"/>
 
-            <TextView
-                android:text="Record ultimi 7 giorni"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="picco recente"
-                android:textSize="11sp"
-                android:alpha="0.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
+        <!-- Descrizione -->
+        <TextView
+            android:id="@+id/text_feedback_description"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
+            android:text="Stai spingendo e assimilando: apprendimento corretto."
+            android:textSize="11sp"
+            android:layout_marginBottom="12dp"/>
 
-            <TextView
-                android:id="@+id/text_week_max"
-                android:text="9"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
+        <!-- Suggerimento -->
+        <TextView
+            android:id="@+id/text_feedback_suggestion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Suggerimento: continua così."
+            android:textSize="11sp"
+            android:layout_marginBottom="16dp"/>
 
-            <TextView
-                android:text=" "
-                android:textSize="11sp"
-                android:alpha="0.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
     </LinearLayout>
+    <!-- BLOCCO LINECHART -->
+    <!-- Separatore prima del grafico -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
+        android:background="?attr/colorOutline" />
 
-    <!-- Stabilità -->
-    <LinearLayout
+    <!-- BLOCCO LINE CHART -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="12dp">
+        android:text="ANDAMENTO SETTIMANALE"
+        android:textAllCaps="true"
+        android:textSize="12sp"
+        android:letterSpacing="0.05"
+        android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:layout_marginBottom="16dp"
+        android:background="@android:color/transparent"
+        android:padding="8dp" />
 
-            <TextView
-                android:text="Solidità"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="quanto ti avvicini tipicamente al tuo massimo degli ultimi 7 giorni"
-                android:textSize="11sp"
-                android:alpha="0.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
-
-            <TextView
-                android:id="@+id/text_stabilita"
-                android:text="0.78"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="rif. ≥ 65%"
-                android:textSize="11sp"
-                android:alpha="0.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-    </LinearLayout>
-
-    <!-- Costanza -->
-    <LinearLayout
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:text="(Il grafico avanza per intervalli consecutivi di 7 giorni)"
+        android:textSize="8sp"
+        android:letterSpacing="0.05"
+        android:layout_marginBottom="8dp" />
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:orientation="vertical">
-
-            <TextView
-                android:text="Costanza"
-                android:textSize="13sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="su 7 giorni quanti sei stato attivo"
-                android:textSize="11sp"
-                android:alpha="0.7"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="end">
-
-            <TextView
-                android:id="@+id/text_costanza"
-                android:text="0.29"
-                android:textSize="14sp"
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-
-            <TextView
-                android:text="rif. ≥ 30%"
-                android:textSize="11sp"
-                android:alpha="0.6"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
-    </LinearLayout>
 
 </LinearLayout>

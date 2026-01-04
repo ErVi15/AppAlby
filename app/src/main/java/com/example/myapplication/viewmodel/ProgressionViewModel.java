@@ -1,6 +1,7 @@
 package com.example.myapplication.viewmodel;
 
 import android.app.Application;
+import android.graphics.Color;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -16,11 +17,14 @@ import com.example.myapplication.data.ProgressionEntry;
 import com.example.myapplication.data.ProgressionRepository;
 import com.example.myapplication.domain.feedback.FeedbackEvaluator;
 import com.example.myapplication.domain.feedback.ProgressFeedback;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineDataSet;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -181,6 +185,49 @@ public class ProgressionViewModel extends AndroidViewModel {
 
 
     //METODI DI MANIPOLAZIONE DEI DATI
+
+    public LineDataSet[] getDataSetForChart(){
+        TreeMap<String, List<String>> map = uiData.getValue();
+        ArrayList<Integer[]> median_max_of_weeks= feedback.prepareDataForChart(convertFromAdapterFormat(map)); //tutti i giorni separati per settimane, e convertiti a date integer
+        Collections.reverse(median_max_of_weeks);
+
+        //Data set per mediane
+        List<Entry> medianaEntries = new ArrayList<>();
+        int i=0;
+        for(Integer[] e: median_max_of_weeks){
+            medianaEntries.add(new Entry(i, e[0]));
+            i++;
+        }
+
+// ...
+
+        LineDataSet medianaDataSet = new LineDataSet(medianaEntries, "Valore tipico");
+        medianaDataSet.setColor(Color.GREEN); // colore linea
+        medianaDataSet.setCircleColor(Color.GREEN); // colore punti
+        medianaDataSet.setLineWidth(2f);
+        medianaDataSet.setCircleRadius(3f);
+        medianaDataSet.setDrawValues(false); //elimina la targhette con i valori sopra ogni punto
+
+
+        //DAta set per massimi
+
+        List<Entry> maxEntries2 = new ArrayList<>();
+        int j=0;
+        for(Integer[] e: median_max_of_weeks){
+            maxEntries2.add(new Entry(j, e[1]));
+            j++;
+        }
+// ...
+
+        LineDataSet maxDataSet2 = new LineDataSet(maxEntries2, "Record");
+        maxDataSet2.setColor(Color.CYAN); // colore linea
+        maxDataSet2.setCircleColor(Color.CYAN); // colore punti
+        maxDataSet2.setLineWidth(2f);
+        maxDataSet2.setCircleRadius(4f);
+        maxDataSet2.setDrawValues(false); //elimina la targhette con i valori sopra ogni punto
+
+        return new LineDataSet[]{medianaDataSet, maxDataSet2};
+    }
 
     private TreeMap<Date, List<String>> buildValueMap(
             List<ProgressionEntry> entries,

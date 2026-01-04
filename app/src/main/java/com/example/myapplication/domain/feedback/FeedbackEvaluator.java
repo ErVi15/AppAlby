@@ -55,6 +55,21 @@ import java.util.TreeMap;
             );
         }
 
+        public ArrayList<Integer[]> prepareDataForChart(TreeMap<Date, List<String>> map){
+
+            ArrayList<TreeMap<Date, Integer>> treeMapArrayList=new ArrayList<>();
+
+            for(TreeMap<Date, List<String>> e: calculator.splitMapBy7Days(map)){
+                treeMapArrayList.add(calculator.calculateMeanOfDays(e));
+            }
+
+            ArrayList<Integer[]> median_for_each_week=new ArrayList<>();
+            for( TreeMap<Date, Integer> f: treeMapArrayList){
+                median_for_each_week.add(new Integer[]{calculator.calculateMedianOnMap(f), calculator.calculateMax(f)});
+
+            }
+            return median_for_each_week;
+        }
 
         float getDeltaMedian(ProgressFeedback week, ProgressFeedback last_week){
             return calculator.delta_mediana(
@@ -83,20 +98,22 @@ import java.util.TreeMap;
             dm=getDeltaMedian(week, last_week);
             dx=getDeltaMax(week, last_week);
 
-            Date today=getTime();
-            if(today.after(week.getStarting_day())){
+            if(last_week.getActive_days()>0.25){
 
                 if(week.getActive_days()>0.25) {
-                    if (dx > 0 && dm > 0) {
-                        week.setState(ProgressState.PROGRESSO_SANO);
-                    } else if (dx > 0 && Math.abs(dm) < 1) {
-                        week.setState(ProgressState.POTENZIALE_NON_CONSOLIDATO);
-                    } else if (Math.abs(dx) < 1 && Math.abs(dm) < 1) {
+
+                    if (Math.abs(dx) < 1 && Math.abs(dm) < 1) { //dati variano di pochissimo
                         week.setState(ProgressState.SOVRACCARICO_STASI);
-                    } else if (dx > 0 && dm < 0) {
-                        week.setState(ProgressState.ALLENAMENTO_IRREGOLARE);
-                    } else if (dx < 0 && dm < 0) {
-                        week.setState(ProgressState.REGRESSIONE);
+                    } else if (dx > 0 && Math.abs(dm) < 1) { //dati mostrano potenzialità ma complessivamente variano di pocchissimo
+                        week.setState(ProgressState.POTENZIALE_NON_CONSOLIDATO);
+                    } else {
+                        if (dx > 0 && dm > 0) {
+                            week.setState(ProgressState.PROGRESSO_SANO);
+                        }  else if (dx > 0 && dm < 0) {
+                            week.setState(ProgressState.ALLENAMENTO_IRREGOLARE);
+                        } else if (dx < 0 && dm < 0) {
+                            week.setState(ProgressState.REGRESSIONE);
+                        }
                     }
                 } else {
                     week.setState(ProgressState.RIPRESA_DOPO_PAUSA);
@@ -107,13 +124,5 @@ import java.util.TreeMap;
 
         }
 
-    private Date getTime(){
 
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.set(Calendar.MINUTE, 0);
-        cal.set(Calendar.SECOND, 0);
-        cal.set(Calendar.MILLISECOND, 0);
-        return cal.getTime();
-    }
 }
