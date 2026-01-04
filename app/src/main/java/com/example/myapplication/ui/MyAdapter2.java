@@ -26,7 +26,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private OnItemDeleteListener listener;
 
-
+    private String u_misura;
     public MyAdapter2(Map<String, List<String>> map, OnItemDeleteListener listener) {
 
         this.items = new ArrayList<>();
@@ -61,7 +61,13 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         if (holder instanceof DayViewHolder) {
             ((DayViewHolder) holder).tvDay.setText(items.get(position).getString());
         } else if (holder instanceof NumberViewHolder) {
-            ((NumberViewHolder) holder).tvNumber.setText(items.get(position).getString());
+            if(u_misura.length()>=10){
+                String umisura_trimmed=u_misura.substring(0,9);
+                ((NumberViewHolder) holder).tvNumber.setText(items.get(position).getString()+" "+umisura_trimmed);
+            }
+            else{
+                ((NumberViewHolder) holder).tvNumber.setText(items.get(position).getString()+" "+u_misura);
+            }
         }
 
 
@@ -90,7 +96,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
 
-    public void addElement(Map<String, List<String> > map){
+    public void addElement(Map<String, List<String> > map, String umisura){
         items.clear();
         for (Map.Entry<String, List<String>> entry : map.entrySet()) {
 
@@ -99,6 +105,7 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 items.add(new EntryItem(e, entry.getKey()));         // aggiungi tutti i valori
             }
         }
+        this.u_misura=umisura;
         Log.d("ADAPTER", "Adapter items: " + items.stream()
                 .map(Object::toString)
                 .collect(Collectors.joining(", ")));

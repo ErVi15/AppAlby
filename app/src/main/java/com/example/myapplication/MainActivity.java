@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -20,6 +21,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RadioButton;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -110,9 +112,18 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+        String testo = getString(R.string.lorem_ipsum);
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_settings ) {
+
+            new AlertDialog.Builder(this)
+                    .setTitle("Info")
+                    .setMessage(testo)
+                    .setPositiveButton("OK", null)
+                    .show();
+
+
             return true;
         }
 

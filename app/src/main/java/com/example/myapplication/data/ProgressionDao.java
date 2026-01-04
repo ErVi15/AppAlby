@@ -38,4 +38,10 @@ public interface ProgressionDao {
     // Cancella una Progression tramite ID
     @Query("DELETE FROM progressions WHERE id = :id")
     void deleteById(long id);
+
+    @Query("SELECT u_misura FROM progressions WHERE id = :id")
+    LiveData<String> getUmisura(long id);
+
+    @Query("SELECT option FROM progressions WHERE id = :id")
+    LiveData<String> getOption(long id);
 }

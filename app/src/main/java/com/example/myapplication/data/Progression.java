@@ -14,8 +14,14 @@ public class Progression {
     @NonNull
     public String name;
 
-    public Progression(@NonNull String name) {
+    public String u_misura;
+
+    public String option;
+
+    public Progression(@NonNull String name, String u_misura, String option) {
         this.name = name;
+        this.u_misura= u_misura;
+        this.option=option;
     }
 }
 

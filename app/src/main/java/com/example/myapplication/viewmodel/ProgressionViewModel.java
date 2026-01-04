@@ -116,8 +116,13 @@ public class ProgressionViewModel extends AndroidViewModel {
     //METODI SULLA LISTA PROGRESSION
 
     // Aggiungi una progression
-    public void addProgression(String name) {
-        Progression p=new Progression(name);
+//    public void addProgression(String name) {
+//        Progression p=new Progression(name);
+//        new Thread(() -> repository.insertProgression(p)).start();
+//    }
+
+    public void addProgression(String name, String u_misura, String option) {
+        Progression p=new Progression(name, u_misura, option);
         new Thread(() -> repository.insertProgression(p)).start();
     }
 
@@ -140,6 +145,15 @@ public class ProgressionViewModel extends AndroidViewModel {
     public void loadIdOfSelectedProgression(long progressionId) {
         selectedProgressionId.setValue(progressionId);
     }
+
+    public LiveData<String> getUMisura(long progressionId){
+        return repository.getUMisura(progressionId);
+    }
+
+    public LiveData<String> getOption(long progressionId){
+        return repository.getOption(progressionId);
+    }
+
 
 
 

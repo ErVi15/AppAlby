@@ -17,20 +17,25 @@ FATTO
 FATTO
 -logica di gestione ripresa_dopo_pausa e dati_insufficenti non corretta, da sistemare
 FATTO
--inserimento icone per i tre campi statistica
 -inserimento grafico andamento globale della mediana
 FATTO
 -limite massimo entries mostrate nel grafico
 FATTO
 -cambiare colore state
 FATTO
--per farlo anche sulle stats posso aggiungere che l'utente imposti degli obbiettivi
+
 -controllare che in input un utente non inserisca valori diversi da numeri
 FATTO
 -gestire il caso di input numerici complessi, come serie di allenamento
+FATTO
 -aggiungere info nel menu tre puntini in alto a destra, che spiegano l'uso dell'app
+FATTO
 -aggiungere unità di misura indicata dall utente alla creazione della progressione
-
+FATTO
+-gestire crash quando si clicca calcola resoconto in assenza di valori
+-inserimento icone per i tre campi statistica
+-per farlo anche sulle stats posso aggiungere che l'utente imposti degli obbiettivi
+-obreserver su button calcola review per mettere un icona quando i dati son stati modificati
 
 
 

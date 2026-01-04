@@ -38,6 +38,14 @@ public class ProgressionRepository {
         executor.execute(() -> progressionDao.delete(p));
     }
 
+    public LiveData<String> getUMisura(long id){
+        return progressionDao.getUmisura(id);
+    }
+
+    public LiveData<String> getOption(long id){
+        return progressionDao.getOption(id);
+    }
+
     // ------------------ ENTRIES ------------------
 
     public LiveData<List<ProgressionEntry>> getAllEntries() {

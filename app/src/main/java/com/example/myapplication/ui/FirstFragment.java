@@ -6,6 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -20,6 +23,8 @@ import com.example.myapplication.data.Progression;
 import com.example.myapplication.databinding.FragmentFirstBinding;
 import com.example.myapplication.viewmodel.ProgressionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -96,23 +101,73 @@ public class FirstFragment extends Fragment {
     }
 
     public void addNewItem() {
-        EditText input = new EditText(requireContext()); //widget android che crea il box in cui inserire iput
+//        EditText input = new EditText(requireContext()); 
+        View dialogView = LayoutInflater.from(requireContext())
+                .inflate(R.layout.custom_progression, null);
 
-        new AlertDialog.Builder(requireContext()) //pop up box in cui inserire l'input receiver preparato prima
-                //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
-                .setTitle("Nome nuovo elemento")
-                .setView(input)
+        EditText inputName = dialogView.findViewById(R.id.inputName); //widget android che crea il box in cui inserire iput
+        EditText inputUMisura = dialogView.findViewById(R.id.inputUMisura);
+        RadioGroup toggleOptions = dialogView.findViewById(R.id.toggleOptions);
+        TextView toggleDesc= dialogView.findViewById(R.id.option_desc);
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Nuova progressione")
+                .setView(dialogView)
                 .setPositiveButton("OK", (dialog, which) -> {
-                    String testo = input.getText().toString();
-                    //this.viewModel.addValueList(testo);
-                    this.viewModel.addProgression(testo);
-                    //dovresti aggiornare la lista anche qui nel firstFragment e non lo fai
-                    //adapter.addElement(testo); // Adapter aggiorna la lista e la RecyclerView
+                    String name = inputName.getText().toString();
+                    String u_misura = inputUMisura.getText().toString();
+
+                    // Recupero l'opzione selezionata
+                    int selectedId = toggleOptions.getCheckedRadioButtonId();
+                    String option = "";
+                    if (selectedId != -1) {
+                        RadioButton selected = dialogView.findViewById(selectedId);
+
+                        option = selected.getText().toString();
+                    }
+
+                    // Passo tutto al viewModel
+                    this.viewModel.addProgression(name, u_misura, option);
+
+                    // Se vuoi aggiornare la RecyclerView subito
+                    // adapter.addElement(name); 
                 })
-                .setNegativeButton("Annulla", (dialog, which) -> {
-                    dialog.cancel();
-                })
-                .show(); //senza questa non viene mostrato nulla
+                .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())
+                .show();
+
+        toggleOptions.setOnCheckedChangeListener((group, checkedId) -> {
+            RadioButton selected = dialogView.findViewById(checkedId);
+            if (selected != null) {
+                switch(selected.getText().toString()) {
+                    case "Opzione 1":
+                        toggleDesc.setText("Valore singolo");
+                        break;
+                    case "Opzione 2":
+                        toggleDesc.setText("Serie x Ripetizioni");
+                        break;
+                    case "Opzione 3":
+                        toggleDesc.setText("Serie x Ripetizioni x Peso");
+                        break;
+                }
+            }
+        });
+
+
+
+//        new AlertDialog.Builder(requireContext()) //pop up box in cui inserire l'input receiver preparato prima
+//                //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
+//                .setTitle("Nome nuova progressione")
+//                .setView(input)
+//                .setPositiveButton("OK", (dialog, which) -> {
+//                    String testo = input.getText().toString();
+//                    //this.viewModel.addValueList(testo);
+//                    this.viewModel.addProgression(testo);
+//                    //dovresti aggiornare la lista anche qui nel firstFragment e non lo fai
+//                    //adapter.addElement(testo); // Adapter aggiorna la lista e la RecyclerView
+//                })
+//                .setNegativeButton("Annulla", (dialog, which) -> {
+//                    dialog.cancel();
+//                })
+//                .show(); //senza questa non viene mostrato nulla
 
     }
 

@@ -3,6 +3,7 @@ package com.example.myapplication.ui;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,6 +30,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeMap;
 
@@ -53,6 +56,8 @@ public class SecondFragment extends Fragment {
     private ProgressionViewModel viewModel;
 
     private long currentId;
+
+    private String umisura;
 
 
     @Override
@@ -83,9 +88,13 @@ public class SecondFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
+
+//qui ho creato un osservatore annidato, che può creare memory leak sul lungo andare, tenere d'occhio (andrebbe usato mediator che impacchetta un Pair dei due oggetti e fai un osservatore solo)
         viewModel.getUiData().observe(getViewLifecycleOwner(), map -> {
-            adapter.addElement(map); // aggiorna RecyclerView
-            viewModel.printUiIds();
+            viewModel.getUMisura(currentId).observe(getViewLifecycleOwner(), uMisura -> {
+                adapter.addElement(map, uMisura); // aggiorna RecyclerView
+                viewModel.printUiIds(); //questo è un metodo log
+            });
         });
 
 
@@ -99,7 +108,7 @@ public class SecondFragment extends Fragment {
         //questo carica le entries visivamente
         viewModel.loadIdOfSelectedProgression(currentId);
         if (currentId != -1) {
-            viewModel.loadEntriesForProgression(currentId); // metodo da implementare
+            viewModel.loadEntriesForProgression(currentId);
         }
 
 
@@ -146,8 +155,21 @@ public class SecondFragment extends Fragment {
             textDescription.setText(feedback.getState().getDescription());
             textSuggestion.setText(feedback.getState().getSugguestion());
             textStabilita.setText(String.valueOf((int) Math.round(feedback.getStabilità()*100))+"%");
-            textMediana.setText(String.valueOf(feedback.getMediana()));
-            textWeekMax.setText(String.valueOf(feedback.getWeekMax()));
+            viewModel.getUMisura(currentId).observe(getViewLifecycleOwner(), uMisura -> {
+                if (uMisura != null) {
+                    // Aggiorna la UI con il valore
+                    if(uMisura.length()>=4) {
+                        uMisura = uMisura.substring(0, 3);
+                    }
+                    textMediana.setText(String.valueOf(feedback.getMediana())+" ("+uMisura+")");
+                    textWeekMax.setText(String.valueOf(feedback.getWeekMax())+" ("+uMisura+")");
+                } else {
+                    // Valore null → puoi mostrare testo di default o vuoto
+                    textMediana.setText(String.valueOf(feedback.getMediana()));
+                    textWeekMax.setText(String.valueOf(feedback.getWeekMax()));
+                }
+            });
+
             textCostanza.setText(String.valueOf((int) Math.round(feedback.getCostanza()*100))+"%");
 
 
@@ -189,28 +211,58 @@ public class SecondFragment extends Fragment {
     }
 
     public void addNewItem() {
-        EditText input = new EditText(requireContext()); //widget android che crea il box in cui inserire iput
 
-        new AlertDialog.Builder(requireContext()) //pop up box in cui inserire l'input receiver preparato prima
-                //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
-                .setTitle("Valore")
-                .setView(input)
-                .setPositiveButton("OK", (dialog, which) -> {
+            viewModel.getOption(currentId).observe(getViewLifecycleOwner(), option -> {
 
-                    String testo = input.getText().toString();
-                    try{
-                        this.viewModel.addEntry(currentId, Integer.parseInt(testo)); //aggiorno la mappa in viewModel
-                    } catch(NumberFormatException e){
-                        Toast.makeText(requireContext(), "Valore non valido (inserisci numeri interi)", Toast.LENGTH_SHORT).show();
-                    }
+                // Inflazione layout XML
+                View dialogView = LayoutInflater.from(requireContext())
+                        .inflate(R.layout.dialog_progression_entry, null);
 
+                EditText input1 = dialogView.findViewById(R.id.input1);//widget android che crea il box in cui inserire iput
+                EditText input2 = dialogView.findViewById(R.id.input2);
+                EditText input3 = dialogView.findViewById(R.id.input3);
 
+                // Mostro/nascondo campi in base all'opzione
+                switch (option) {
+                    case "Opzione 1":
+                        input2.setVisibility(View.GONE);
+                        input3.setVisibility(View.GONE);
+                        break;
+                    case "Opzione 2":
+                        input2.setVisibility(View.VISIBLE);
+                        input3.setVisibility(View.GONE);
+                        break;
+                    case "Opzione 3":
+                        input2.setVisibility(View.VISIBLE);
+                        input3.setVisibility(View.VISIBLE);
+                        break;
+                }
 
-                })
-                .setNegativeButton("Annulla", (dialog, which) -> {
-                    dialog.cancel();
-                })
-                .show(); //senza questa non viene mostrato nulla
+                List<EditText> fields = new ArrayList<>();
+                fields.add(input1);
+                if(input2.getVisibility() == View.VISIBLE) fields.add(input2);
+                if(input3.getVisibility() == View.VISIBLE) fields.add(input3);
+                //pop up box in cui inserire l'input receiver preparato prima
+                //                            //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
+                new AlertDialog.Builder(requireContext())
+                        .setTitle("Inserisci valori")
+                        .setView(dialogView)
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            try {
+                                int result = 1;
+                                for(EditText f : fields) {
+                                    result *= Integer.parseInt(f.getText().toString());
+                                }
+                                viewModel.addEntry(currentId, result);//aggiorno la mappa in viewModel
+                            } catch (NumberFormatException e) {
+                                Toast.makeText(requireContext(),
+                                        "Valore non valido (inserisci numeri interi)",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())
+                        .show();
+            });
 
     }
 
