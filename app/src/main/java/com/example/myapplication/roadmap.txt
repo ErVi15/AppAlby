@@ -23,7 +23,6 @@ FATTO
 FATTO
 -cambiare colore state
 FATTO
-
 -controllare che in input un utente non inserisca valori diversi da numeri
 FATTO
 -gestire il caso di input numerici complessi, come serie di allenamento
@@ -33,9 +32,12 @@ FATTO
 -aggiungere unità di misura indicata dall utente alla creazione della progressione
 FATTO
 -gestire crash quando si clicca calcola resoconto in assenza di valori
+FATTO
+-obreserver su button calcola review per mettere un icona quando i dati son stati modificati
+FATTO
 -inserimento icone per i tre campi statistica
 -per farlo anche sulle stats posso aggiungere che l'utente imposti degli obbiettivi
--obreserver su button calcola review per mettere un icona quando i dati son stati modificati
+-aggiungere a mano una entry con DatePickerDialog
 
 
 

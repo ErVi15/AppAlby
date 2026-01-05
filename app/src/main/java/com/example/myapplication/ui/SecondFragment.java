@@ -1,5 +1,7 @@
 package com.example.myapplication.ui;
 
+import android.animation.ObjectAnimator;
+import android.animation.ValueAnimator;
 import android.app.AlertDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -59,6 +61,7 @@ public class SecondFragment extends Fragment {
 
     private String umisura;
 
+    private boolean firstLoad = true;
 
     @Override
     public View onCreateView(
@@ -88,9 +91,28 @@ public class SecondFragment extends Fragment {
 
         recyclerView.setAdapter(adapter);
 
-
-//qui ho creato un osservatore annidato, che può creare memory leak sul lungo andare, tenere d'occhio (andrebbe usato mediator che impacchetta un Pair dei due oggetti e fai un osservatore solo)
+        View indicator = binding.buttonSecond.findViewById(R.id.view_feedback_indicator);
+        ObjectAnimator blinkAnim = ObjectAnimator.ofFloat(indicator, "alpha", 1f, 0f);
+        //qui ho creato un osservatore annidato, che può creare memory leak sul lungo andare, tenere d'occhio (andrebbe usato mediator che impacchetta un Pair dei due oggetti e fai un osservatore solo)
         viewModel.getUiData().observe(getViewLifecycleOwner(), map -> {
+
+            if(firstLoad){
+                firstLoad=false;
+                indicator.setBackgroundResource(R.drawable.bg_feedback_indicator);
+                // animazione lampeggiante: alpha da 1 a 0 ripetutamente
+
+                blinkAnim.setDuration(1000); // mezzo secondo
+                blinkAnim.setRepeatMode(ValueAnimator.REVERSE);
+                blinkAnim.setRepeatCount(ValueAnimator.INFINITE);
+                blinkAnim.start();
+                blinkAnim.pause();
+
+            } else {
+                indicator.setBackgroundResource(R.drawable.bg_feedback_indicator_positive);
+                blinkAnim.resume();
+            }
+
+
             viewModel.getUMisura(currentId).observe(getViewLifecycleOwner(), uMisura -> {
                 adapter.addElement(map, uMisura); // aggiorna RecyclerView
                 viewModel.printUiIds(); //questo è un metodo log
@@ -112,9 +134,17 @@ public class SecondFragment extends Fragment {
         }
 
 
+
         binding.buttonSecond.setOnClickListener(v -> {
             ProgressFeedback feedback = viewModel.getFinalFeedback();
-            if (feedback == null) return;
+            if (feedback == null) {
+                Toast.makeText(requireContext(),
+                        "Inserisci almeno un valore",
+                        Toast.LENGTH_SHORT).show();
+                return;
+            }
+            indicator.setBackgroundResource(R.drawable.bg_feedback_indicator);
+            blinkAnim.pause();
 
             // Creo il BottomSheetDialog
             BottomSheetDialog bottomSheet = new BottomSheetDialog(requireContext());
@@ -267,31 +297,15 @@ public class SecondFragment extends Fragment {
     }
 
 
-
-
     public void onResume(){
         super.onResume();
         ((MainActivity) requireActivity()).setFabAction(this::addNewItem);
     }
 
-//    public void removeItem(MyAdapter2.EntryItem item) {
-//        String day=item.getDay();
-//        String value=item.getString();
-//        viewModel.deleteEntry(day, Integer.parseInt(value));
-//
-//    }
-
-//    public void removeItem(long id) {
-//        viewModel.deleteEntry(id);
-//    }
 
     public void removeItem(String day, int position) {
         viewModel.deleteEntry(day, position);
     }
-
-
-
-
 
 
 }

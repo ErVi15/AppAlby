@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <!-- Colore di sfondo -->
+    <solid android:color="@color/blue"/>
+
+    <!-- Arrotonda tutti gli angoli -->
+    <corners android:radius="16dp"/>
+
+    <!-- Se vuoi un bordo:
+    <stroke
+        android:width="2dp"
+        android:color="@color/my_button_border"/>
+    -->
+</shape>

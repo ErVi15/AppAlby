@@ -34,8 +34,6 @@ import java.util.TreeMap;
 
 public class ProgressionViewModel extends AndroidViewModel {
 
-    //private final ArrayList<String> list=new ArrayList<>();
-    //private final Map<Date, List<String>> diz = new TreeMap<>();
     private MutableLiveData<TreeMap<String, List<String>>> uiData = new MutableLiveData<>(new TreeMap<>());
     private final Map<String, List<Long>> uiIds = new HashMap<>();
 
@@ -54,35 +52,6 @@ public class ProgressionViewModel extends AndroidViewModel {
         progression = repository.getAllProgressions();
         progression_entry=repository.getAllEntries();
         feedback=new FeedbackEvaluator();
-
-
-        //transformation.map attiva un lstener  che ogni volta che il primo argomento indicato viene invocato, lui fa una trasformazione prima di passarlo
-//        this.uiData = (MutableLiveData<TreeMap<String, List<String>>>) Transformations.map(progression_entry, progression -> {
-//            TreeMap<Date, List<String>> valueMap = new TreeMap<>();
-//            Map<Date, List<Long>> idMap = new TreeMap<>();
-//
-//            for (ProgressionEntry p : progression) {
-//                valueMap.computeIfAbsent(p.date, d -> new ArrayList<>())
-//                        .add(String.valueOf(p.value));
-//
-//                idMap.computeIfAbsent(p.date, d -> new ArrayList<>())
-//                        .add(p.id);
-//            }
-//
-//            // conversione date → string
-//            TreeMap<String, List<String>> uiMap =
-//                    convertToAdapterFormat(valueMap);
-//
-//            Map<String, List<Long>> tempIds =
-//                    convertIdsToAdapterFormat(idMap);
-//
-//            // aggiorna la mappa parallela
-//            uiIds.clear();
-//            uiIds.putAll(tempIds);
-//
-//
-//            return uiMap;
-//        });
 
         uiData = (MutableLiveData<TreeMap<String, List<String>>>)
                 Transformations.switchMap(selectedProgressionId, pid ->
@@ -109,17 +78,9 @@ public class ProgressionViewModel extends AndroidViewModel {
 
 
     }
-        //progression_entry =repository.getEntries();
-
 
 
     //METODI SULLA LISTA PROGRESSION
-
-    // Aggiungi una progression
-//    public void addProgression(String name) {
-//        Progression p=new Progression(name);
-//        new Thread(() -> repository.insertProgression(p)).start();
-//    }
 
     public void addProgression(String name, String u_misura, String option) {
         Progression p=new Progression(name, u_misura, option);
@@ -388,8 +349,12 @@ public class ProgressionViewModel extends AndroidViewModel {
     public ProgressFeedback getFinalFeedback(){
         ProgressFeedback this_week_fb=getFeedback();
         ProgressFeedback second_last_week_fb=getFeedbackLastWeek();
-        feedback.setProgressState(this_week_fb, second_last_week_fb); //imposta stato e descrizione nell-ogetto ProgressFeedback
-        return this_week_fb;
+        if(this_week_fb==null && second_last_week_fb==null){
+            return null;
+        } else {
+            feedback.setProgressState(this_week_fb, second_last_week_fb); //imposta stato e descrizione nell-ogetto ProgressFeedback
+            return this_week_fb;
+        }
 
     }
 

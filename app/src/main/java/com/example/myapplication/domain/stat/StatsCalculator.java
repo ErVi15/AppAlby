@@ -205,6 +205,9 @@ public class StatsCalculator {
     }
 
     public float stabilità(int mediana_settimanale, int week_max){
+        if(mediana_settimanale==0 || week_max ==0){
+            return 0;
+        }
         return (float) mediana_settimanale/ (float) week_max;
     }
 
@@ -213,6 +216,7 @@ public class StatsCalculator {
     }
 
     public float delta_max(int max, int max_prec){
+
         return (float) max-(float) max_prec;
     }
 
