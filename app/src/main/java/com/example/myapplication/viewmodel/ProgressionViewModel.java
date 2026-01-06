@@ -3,10 +3,12 @@ package com.example.myapplication.viewmodel;
 import android.app.Application;
 import android.graphics.Color;
 import android.util.Log;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
@@ -30,20 +32,23 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class ProgressionViewModel extends AndroidViewModel {
 
     private MutableLiveData<TreeMap<String, List<String>>> uiData = new MutableLiveData<>(new TreeMap<>());
     private final Map<String, List<Long>> uiIds = new HashMap<>();
-
     private ProgressionRepository repository;
     private LiveData<List<Progression>> progression;
     private LiveData<List<ProgressionEntry>> progression_entry;
     private final MutableLiveData<Long> selectedProgressionId =
             new MutableLiveData<>();
 
+    private final MutableLiveData<Progression> selectedProgression = new MutableLiveData<>();
+
     private FeedbackEvaluator feedback;
+    private Date custom_date;
 
 
     public ProgressionViewModel(@NonNull Application application) {
@@ -93,6 +98,10 @@ public class ProgressionViewModel extends AndroidViewModel {
         new Thread(() -> repository.deleteProgression(p)).start();
     }
 
+    public void updateProgression(){
+        new Thread(() -> repository.updateProgression(selectedProgression.getValue())).start();
+    }
+
     public LiveData<List<Progression>> getAllProgression(){
         return progression;
     }
@@ -105,15 +114,54 @@ public class ProgressionViewModel extends AndroidViewModel {
 
     public void loadIdOfSelectedProgression(long progressionId) {
         selectedProgressionId.setValue(progressionId);
+
+        Progression p = findProgressionById(progressionId);
+        selectedProgression.setValue(p);
     }
 
-    public LiveData<String> getUMisura(long progressionId){
-        return repository.getUMisura(progressionId);
+    private Progression findProgressionById(long id) {
+        if (progression.getValue() == null) return null;
+
+        for (Progression p : progression.getValue()) {
+            if (p.id == id) return p;
+        }
+        return null;
     }
 
-    public LiveData<String> getOption(long progressionId){
-        return repository.getOption(progressionId);
+    public String getUMisura(long progressionId){
+        return selectedProgression.getValue() != null
+                ? selectedProgression.getValue().u_misura
+                : "";
     }
+
+
+    public String getOption(long progressionId){
+        return selectedProgression.getValue() !=null
+                ? selectedProgression.getValue().option
+                : "";
+    }
+
+    public void setCostanzaDesiderata(int valore){
+        Objects.requireNonNull(selectedProgression.getValue()).costanza_desiderata=valore;
+    }
+
+    public void setValoreDesiderato(int valore){
+        Objects.requireNonNull(selectedProgression.getValue()).valore_desiderato=valore;
+    }
+
+    public int getCostanzaDesiderata() {
+        return Objects.requireNonNull(selectedProgression.getValue()).costanza_desiderata!=0
+                ? selectedProgression.getValue().costanza_desiderata
+                : 0;
+
+    }
+
+    public int getValoreDesiderato() {
+        return Objects.requireNonNull(selectedProgression.getValue()).valore_desiderato!=0
+                ? selectedProgression.getValue().valore_desiderato
+                : 0;
+    }
+
 
 
 
@@ -123,6 +171,12 @@ public class ProgressionViewModel extends AndroidViewModel {
     public void addEntry(long id, int value) {
         ProgressionEntry e =
                 new ProgressionEntry(id, getTime(), value);
+        repository.insertEntry(e);
+        Log.d("ENTRY", "id=" + e.id + " progressionId=" + e.progressionId);
+    }
+    public void addEntry(long id, int value, Date custom_date) {
+        ProgressionEntry e =
+                new ProgressionEntry(id, custom_date, value);
         repository.insertEntry(e);
         Log.d("ENTRY", "id=" + e.id + " progressionId=" + e.progressionId);
     }
@@ -315,6 +369,17 @@ public class ProgressionViewModel extends AndroidViewModel {
         cal.set(Calendar.SECOND, 0);
         cal.set(Calendar.MILLISECOND, 0);
         return cal.getTime();
+    }
+
+    public Date getCustom_date() {
+        return custom_date;
+    }
+
+    public void resetCustom_date(){
+        this.custom_date=getTime();
+    }
+    public void setCustom_date(Date custom_date) {
+        this.custom_date = custom_date;
     }
 
     public void debugLogEntryIds() {

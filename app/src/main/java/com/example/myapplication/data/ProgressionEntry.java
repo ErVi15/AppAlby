@@ -31,7 +31,6 @@ public class ProgressionEntry {
 
     public int value; // ripetizioni, bpm, peso, ecc.
 
-
     public ProgressionEntry() {}
 
     @Ignore

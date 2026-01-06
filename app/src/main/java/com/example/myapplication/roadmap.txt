@@ -37,7 +37,15 @@ FATTO
 FATTO
 -inserimento icone per i tre campi statistica
 -per farlo anche sulle stats posso aggiungere che l'utente imposti degli obbiettivi
+FATTO
 -aggiungere a mano una entry con DatePickerDialog
+FATTO
+-nuova progressione se opzione 2 o 3 selezionte unità misura disabilitata
+FATTO
+-nel nuova progressione il radio button su opzione 1 deve essere checekd di default
+FATTO
+
+bug: cancellamento entry non funziona dopo aver aggiunto altre in modo random. Se clicchi le prime dell elenco torna a funzinoare
 
 
 

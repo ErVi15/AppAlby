@@ -24,6 +24,13 @@ public interface ProgressionDao {
     @Update
     void update(Progression progression);
 
+    @Query("UPDATE progressions SET costanza_desiderata = :value WHERE id = :progressionId")
+    void updateCostanzaDesiderata(long progressionId, int value);
+
+    @Query("UPDATE progressions SET valore_desiderato = :value WHERE id = :progressionId")
+    void updateValoreDesiderato(long progressionId, int value);
+
+
     // Cancella una Progression specifica
     @Delete
     void delete(Progression progression);
@@ -39,9 +46,4 @@ public interface ProgressionDao {
     @Query("DELETE FROM progressions WHERE id = :id")
     void deleteById(long id);
 
-    @Query("SELECT u_misura FROM progressions WHERE id = :id")
-    LiveData<String> getUmisura(long id);
-
-    @Query("SELECT option FROM progressions WHERE id = :id")
-    LiveData<String> getOption(long id);
 }

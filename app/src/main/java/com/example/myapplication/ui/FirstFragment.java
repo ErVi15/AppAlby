@@ -1,5 +1,8 @@
 package com.example.myapplication.ui;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
+
 import android.app.AlertDialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -134,41 +137,28 @@ public class FirstFragment extends Fragment {
                 .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())
                 .show();
 
+        toggleOptions.check(R.id.oneinput);
         toggleOptions.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton selected = dialogView.findViewById(checkedId);
             if (selected != null) {
                 switch(selected.getText().toString()) {
                     case "Opzione 1":
                         toggleDesc.setText("Valore singolo");
+                        inputUMisura.setVisibility(VISIBLE);
                         break;
                     case "Opzione 2":
                         toggleDesc.setText("Serie x Ripetizioni");
+                        inputUMisura.getText().clear();
+                        inputUMisura.setVisibility(GONE);
                         break;
                     case "Opzione 3":
                         toggleDesc.setText("Serie x Ripetizioni x Peso");
+                        inputUMisura.getText().clear();
+                        inputUMisura.setVisibility(GONE);
                         break;
                 }
             }
         });
-
-
-
-//        new AlertDialog.Builder(requireContext()) //pop up box in cui inserire l'input receiver preparato prima
-//                //richiedono entrambe il Context, ogni volta che si manipola la vista bisogna averlo
-//                .setTitle("Nome nuova progressione")
-//                .setView(input)
-//                .setPositiveButton("OK", (dialog, which) -> {
-//                    String testo = input.getText().toString();
-//                    //this.viewModel.addValueList(testo);
-//                    this.viewModel.addProgression(testo);
-//                    //dovresti aggiornare la lista anche qui nel firstFragment e non lo fai
-//                    //adapter.addElement(testo); // Adapter aggiorna la lista e la RecyclerView
-//                })
-//                .setNegativeButton("Annulla", (dialog, which) -> {
-//                    dialog.cancel();
-//                })
-//                .show(); //senza questa non viene mostrato nulla
-
     }
 
     public void removeItem(Progression p) {

@@ -38,12 +38,13 @@ public class ProgressionRepository {
         executor.execute(() -> progressionDao.delete(p));
     }
 
-    public LiveData<String> getUMisura(long id){
-        return progressionDao.getUmisura(id);
+
+    public void setCostanza(long id, int valore){
+        executor.execute(() ->progressionDao.updateCostanzaDesiderata(id, valore));
     }
 
-    public LiveData<String> getOption(long id){
-        return progressionDao.getOption(id);
+    public void setValore(long id, int valore){
+        executor.execute(() ->progressionDao.updateValoreDesiderato(id, valore));
     }
 
     // ------------------ ENTRIES ------------------

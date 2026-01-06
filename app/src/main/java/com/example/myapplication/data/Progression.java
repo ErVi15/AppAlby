@@ -18,10 +18,15 @@ public class Progression {
 
     public String option;
 
+    public int valore_desiderato;
+    public int costanza_desiderata;
+
+
     public Progression(@NonNull String name, String u_misura, String option) {
         this.name = name;
         this.u_misura= u_misura;
         this.option=option;
     }
+
 }
 
