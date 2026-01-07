@@ -217,10 +217,12 @@ public class SecondFragment extends Fragment {
             switch(feedback.getState()) {
                 case ALLENAMENTO_IRREGOLARE:
                 case SOVRACCARICO_STASI:
-                case POTENZIALE_NON_CONSOLIDATO:
+                case AFFATICAMENTO_PASSIVO:
                     textState.setTextColor(Color.parseColor("#EAD895"));
                     break;
                 case PROGRESSO_SANO:
+                case POTENZIALE_NON_CONSOLIDATO:
+                case RECUPERO_SENZA_STIMOLO:
                     textState.setTextColor(Color.parseColor("#006400"));
                     break;
                 case REGRESSIONE:

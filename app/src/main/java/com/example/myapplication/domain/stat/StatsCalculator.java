@@ -220,6 +220,7 @@ public class StatsCalculator {
         return (float) max-(float) max_prec;
     }
 
+
     //UTILITY
     private Date getTime(){
 

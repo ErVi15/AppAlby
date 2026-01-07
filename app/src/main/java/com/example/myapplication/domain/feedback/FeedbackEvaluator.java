@@ -20,20 +20,6 @@ import java.util.TreeMap;
         public ProgressFeedback getFeedback(TreeMap<Date, List<String>> map, boolean is_second_last){
 
             TreeMap<Date, Integer> map_int=calculator.calculateMeanOfDays(calculator.cutLast7Days(map, is_second_last));
-//            TreeMap<Date, Integer> map_int=new TreeMap<>();
-//            map_int.put(map.firstKey(), 3);
-//
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(map.firstKey());
-//            cal.add(Calendar.DAY_OF_MONTH, -1);
-//            Date originalDate = cal.getTime(); // esempio
-//
-//            cal.add(Calendar.DAY_OF_MONTH, -2);
-//            Date originalDate2 = map.firstKey(); // esempio
-//
-//            map_int.put(originalDate, 5);
-//            map_int.put(originalDate2, 6);
-
 
             int median=calculator.calculateMedianOnMap(map_int);
             int active_days=calculator.calculateDays(map_int);
@@ -83,6 +69,12 @@ import java.util.TreeMap;
                     last_week.getWeekMax());
         }
 
+        private boolean isDeltaStatic(float delta, float reference) {
+            float ABS_MIN = 1f;
+            float REL_EPS = 0.1f; //10% del valore precedente
+            return Math.abs(delta) < Math.max(ABS_MIN, Math.abs(reference) * REL_EPS);
+        }
+
         /*
         CASO MANCANTI
         DX	DM	Significato possibile
@@ -95,26 +87,48 @@ import java.util.TreeMap;
 
             float dm=0;
             float dx=0;
+            boolean dmStatic = false;
+            boolean dxStatic = false;
             dm=getDeltaMedian(week, last_week);
             dx=getDeltaMax(week, last_week);
+
+            dmStatic = isDeltaStatic(dm, last_week.getMediana());
+            dxStatic = isDeltaStatic(dx, last_week.getWeekMax());
+
 
             if(last_week.getActive_days()>0.25){
 
                 if(week.getActive_days()>0.25) {
 
-                    if (Math.abs(dx) < 1 && Math.abs(dm) < 1) { //dati variano di pochissimo
+                    if (dxStatic && dmStatic) {
                         week.setState(ProgressState.SOVRACCARICO_STASI);
-                    } else if (dx > 0 && Math.abs(dm) < 1) { //dati mostrano potenzialità ma complessivamente variano di pocchissimo
+
+                    } else if (dxStatic && !dmStatic && dm < 0) {
+                        week.setState(ProgressState.AFFATICAMENTO_PASSIVO);
+
+                    } else if (dxStatic && !dmStatic && dm > 0) {
+                        week.setState(ProgressState.RECUPERO_SENZA_STIMOLO);
+
+                    } else if (!dxStatic && dmStatic && dx < 0) {
+                        week.setState(ProgressState.PERDITA_DI_PICCO);
+
+                    } else if (!dxStatic && dmStatic && dx > 0) {
                         week.setState(ProgressState.POTENZIALE_NON_CONSOLIDATO);
+
+                    } else if (dx > 0 && dm > 0) {
+                        week.setState(ProgressState.PROGRESSO_SANO);
+
+                    } else if (dx > 0 && dm < 0) {
+                        week.setState(ProgressState.ALLENAMENTO_IRREGOLARE);
+
+                    } else if (dx < 0 && dm < 0) {
+                        week.setState(ProgressState.REGRESSIONE);
+
                     } else {
-                        if (dx > 0 && dm > 0) {
-                            week.setState(ProgressState.PROGRESSO_SANO);
-                        }  else if (dx > 0 && dm < 0) {
-                            week.setState(ProgressState.ALLENAMENTO_IRREGOLARE);
-                        } else if (dx < 0 && dm < 0) {
-                            week.setState(ProgressState.REGRESSIONE);
-                        }
+                        week.setState(ProgressState.ADATTMENTO_INCOERENTE);
                     }
+
+
                 } else {
                     week.setState(ProgressState.RIPRESA_DOPO_PAUSA);
                 }
