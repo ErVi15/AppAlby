@@ -25,19 +25,19 @@
 
         <RadioButton
             android:id="@+id/oneinput"
-            android:text="Opzione 1"
+            android:text="Singolo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <RadioButton
             android:id="@+id/twoinput"
-            android:text="Opzione 2"
+            android:text="Coppia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
         <RadioButton
             android:id="@+id/threeinput"
-            android:text="Opzione 3"
+            android:text="Tripla"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RadioGroup>

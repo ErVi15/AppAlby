@@ -22,6 +22,7 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.RadioButton;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity {
@@ -113,27 +114,32 @@ public class MainActivity extends AppCompatActivity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        String testo = getString(R.string.lorem_ipsum);
-        String testo2 = getString(R.string.lorem_ipsum2);
-        TextView tv = new TextView(this);
-        tv.setText(testo+testo2);
-        tv.setPadding(48, 32, 48, 32);
-        tv.setTextSize(14);
-        tv.setLineSpacing(0f, 1.2f);
-        tv.setTextIsSelectable(false);
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings ) {
+        if (id == R.id.action_settings) {
+            String testo = getString(R.string.lorem_ipsum);
+            String testo2 = getString(R.string.lorem_ipsum2);
 
+            // TextView
+            TextView tv = new TextView(this);
+            tv.setText(testo  + testo2);
+            tv.setPadding(48, 32, 48, 32);
+            tv.setTextSize(14);
+            tv.setLineSpacing(0f, 1.2f);
+
+            // ScrollView wrapper
+            ScrollView scrollView = new ScrollView(this);
+            scrollView.addView(tv);
+
+            // Dialog
             new AlertDialog.Builder(this)
                     .setTitle("Info")
-                    .setView(tv)
+                    .setView(scrollView)
                     .setPositiveButton("OK", null)
                     .show();
 
-
             return true;
         }
+
 
         return super.onOptionsItemSelected(item);
     }

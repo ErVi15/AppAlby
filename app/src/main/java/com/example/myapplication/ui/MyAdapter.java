@@ -26,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView text;
-        Button button1, button2;
+        ImageButton button1, button2;
 
         public MyViewHolder(View itemView) {
             super(itemView);

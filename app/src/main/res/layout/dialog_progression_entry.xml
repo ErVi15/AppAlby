@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/dialog_layout"
     android:orientation="vertical"
     android:padding="16dp"
@@ -27,11 +27,35 @@
         android:hint="Valore 3"
         android:visibility="gone"/>
 
-    <RadioButton
-        android:id="@+id/custom_selector"
-        android:text="Data custom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
+    <!-- Selettore data: ImageButton + TextView -->
+    <LinearLayout
+        android:id="@+id/custom_date_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:layout_marginBottom="12dp">
+
+        <ImageButton
+            android:id="@+id/custom_selector"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:contentDescription="Seleziona data"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_calendar"
+        android:scaleType="centerInside"
+        app:tint="?attr/colorPrimary"/>
+
+        <TextView
+            android:id="@+id/custom_date_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Seleziona una data"
+            android:textSize="14sp"
+            android:textColor="?android:textColorPrimary"/>
+    </LinearLayout>
 
 </LinearLayout>

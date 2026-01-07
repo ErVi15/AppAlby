@@ -26,6 +26,7 @@ import com.example.myapplication.data.Progression;
 import com.example.myapplication.databinding.FragmentFirstBinding;
 import com.example.myapplication.viewmodel.ProgressionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textview.MaterialTextView;
 
 import org.w3c.dom.Text;
 
@@ -80,8 +81,16 @@ public class FirstFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
 
+        MaterialTextView emptyText= view.findViewById(R.id.emptyText);
         viewModel.getAllProgression().observe(getViewLifecycleOwner(), list -> {
             adapter.setList(list); // aggiorna RecyclerView
+
+            if(list.isEmpty()){
+                emptyText.setVisibility(View.VISIBLE);
+            } else {
+                emptyText.setVisibility(View.GONE);
+            }
+
         });
 
 
@@ -138,20 +147,21 @@ public class FirstFragment extends Fragment {
                 .show();
 
         toggleOptions.check(R.id.oneinput);
+        toggleDesc.setText("Valore singolo");
         toggleOptions.setOnCheckedChangeListener((group, checkedId) -> {
             RadioButton selected = dialogView.findViewById(checkedId);
             if (selected != null) {
                 switch(selected.getText().toString()) {
-                    case "Opzione 1":
+                    case "Singolo":
                         toggleDesc.setText("Valore singolo");
                         inputUMisura.setVisibility(VISIBLE);
                         break;
-                    case "Opzione 2":
+                    case "Coppia":
                         toggleDesc.setText("Serie x Ripetizioni");
                         inputUMisura.getText().clear();
                         inputUMisura.setVisibility(GONE);
                         break;
-                    case "Opzione 3":
+                    case "Tripla":
                         toggleDesc.setText("Serie x Ripetizioni x Peso");
                         inputUMisura.getText().clear();
                         inputUMisura.setVisibility(GONE);

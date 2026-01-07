@@ -35,11 +35,14 @@ import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.LineData;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textview.MaterialTextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.TreeMap;
 
@@ -97,9 +100,18 @@ public class SecondFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         View indicator = binding.buttonSecond.findViewById(R.id.view_feedback_indicator);
         ObjectAnimator blinkAnim = ObjectAnimator.ofFloat(indicator, "alpha", 1f, 0f);
+        MaterialTextView emptyText= view.findViewById(R.id.emptyText2);
 
         //qui ho creato un osservatore annidato, che può creare memory leak sul lungo andare, tenere d'occhio (andrebbe usato mediator che impacchetta un Pair dei due oggetti e fai un osservatore solo)
         viewModel.getUiData().observe(getViewLifecycleOwner(), map -> {
+
+
+
+                if(map.isEmpty()){
+                    emptyText.setVisibility(View.VISIBLE);
+                } else {
+                    emptyText.setVisibility(View.GONE);
+                }
 
             if(firstLoad){
                 firstLoad=false;
@@ -326,20 +338,23 @@ public class SecondFragment extends Fragment {
         EditText input1 = dialogView.findViewById(R.id.input1);//widget android che crea il box in cui inserire iput
         EditText input2 = dialogView.findViewById(R.id.input2);
         EditText input3 = dialogView.findViewById(R.id.input3);
-        RadioButton custom_selector= dialogView.findViewById(R.id.custom_selector);
+        ImageButton custom_selector= dialogView.findViewById(R.id.custom_selector);
+        TextView customDateText =dialogView.findViewById(R.id.custom_date_text);
 
+        // Stato della data selezionata
+        final boolean[] isCustomDateSelected = {false};
 
         // Mostro/nascondo campi in base all'opzione
         switch (option) {
-            case "Opzione 1":
+            case "Singolo":
                 input2.setVisibility(View.GONE);
                 input3.setVisibility(View.GONE);
                 break;
-            case "Opzione 2":
+            case "Coppia":
                 input2.setVisibility(View.VISIBLE);
                 input3.setVisibility(View.GONE);
                 break;
-            case "Opzione 3":
+            case "Tripla":
                 input2.setVisibility(View.VISIBLE);
                 input3.setVisibility(View.VISIBLE);
                 break;
@@ -350,38 +365,44 @@ public class SecondFragment extends Fragment {
         if(input2.getVisibility() == View.VISIBLE) fields.add(input2);
         if(input3.getVisibility() == View.VISIBLE) fields.add(input3);
 
-        custom_selector.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked) {
-                Calendar calendar = Calendar.getInstance();
+        custom_selector.setOnClickListener(v -> {
+            if(!isAdded())return;
+            Calendar calendar = Calendar.getInstance();
 
-                int year = calendar.get(Calendar.YEAR);
-                int month = calendar.get(Calendar.MONTH);
-                int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        requireContext(),
-                        (view, selectedYear, selectedMonth, selectedDay) -> {
-                            // selectedMonth è 0-based (0 = gennaio)
-                            Calendar selectedDate = Calendar.getInstance();
-                            selectedDate.set(selectedYear, selectedMonth, selectedDay);
-                            selectedDate.set(Calendar.HOUR_OF_DAY, 0);
-                            selectedDate.set(Calendar.MINUTE, 0);
-                            selectedDate.set(Calendar.SECOND, 0);
-                            selectedDate.set(Calendar.MILLISECOND, 0);
+            DatePickerDialog datePickerDialog = new DatePickerDialog(
+                    requireContext(),
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // selectedMonth è 0-based (0 = gennaio)
+                        Calendar selectedDate = Calendar.getInstance();
+                        selectedDate.set(selectedYear, selectedMonth, selectedDay);
+                        selectedDate.set(Calendar.HOUR_OF_DAY, 0);
+                        selectedDate.set(Calendar.MINUTE, 0);
+                        selectedDate.set(Calendar.SECOND, 0);
+                        selectedDate.set(Calendar.MILLISECOND, 0);
 
-                            viewModel.setCustom_date(selectedDate.getTime());
-                            // qui usi la data (salvataggio, aggiornamento UI, ecc.)
-                        },
-                        year,
-                        month,
-                        day
-                );
+                        viewModel.setCustom_date(selectedDate.getTime());
+                        // qui usi la data (salvataggio, aggiornamento UI, ecc.)
+                        isCustomDateSelected[0]=true;
+
+                        // Aggiorna TextView (opzionale)
+                        if (customDateText != null) {
+                            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                            customDateText.setText(sdf.format(selectedDate.getTime()));
+                        }
+                    },
+                    year,
+                    month,
+                    day
+            );
 
 // opzionale ma consigliato: blocca date future
-                datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
+            datePickerDialog.getDatePicker().setMaxDate(System.currentTimeMillis());
 
-                datePickerDialog.show();
-            }
+            datePickerDialog.show();
         });
 
         //pop up box in cui inserire l'input receiver preparato prima
@@ -396,7 +417,7 @@ public class SecondFragment extends Fragment {
                         for(EditText f : fields) {
                             result *= Integer.parseInt(f.getText().toString());
                         }
-                        if(custom_selector.isChecked()){
+                        if(isCustomDateSelected[0]){
                             viewModel.addEntry(currentId, result, viewModel.getCustom_date());//aggiorno la mappa in viewModel
                         } else {
                             viewModel.addEntry(currentId, result);//aggiorno la mappa in viewModel
