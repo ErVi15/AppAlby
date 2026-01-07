@@ -329,30 +329,49 @@
         android:background="?attr/colorOutline" />
 
     <!-- BLOCCO LINE CHART -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="ANDAMENTO SETTIMANALE"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        android:letterSpacing="0.05"
-        android:layout_marginBottom="8dp" />
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/lineChart"
-        android:layout_width="match_parent"
-        android:layout_height="220dp"
-        android:layout_marginBottom="16dp"
-        android:background="@android:color/transparent"
-        android:padding="8dp" />
 
-    <TextView
+
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="(Il grafico avanza per intervalli consecutivi di 7 giorni)"
-        android:textSize="8sp"
-        android:letterSpacing="0.05"
-        android:layout_marginBottom="8dp" />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="8dp">
+
+        <!-- Titolo -->
+        <TextView
+            android:id="@+id/titleText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="ANDAMENTO GLOBALE (max 6 mesi)"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Grafico -->
+        <com.github.mikephil.charting.charts.LineChart
+            android:id="@+id/lineChart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:minHeight="200dp"
+            android:padding="8dp"
+            android:background="@android:color/transparent"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Legenda -->
+        <TextView
+            android:id="@+id/legendText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/legenda"
+            android:textSize="8sp"
+            android:letterSpacing="0.05"
+            android:layout_marginBottom="8dp" />
+
+    </LinearLayout>
 
 
 </LinearLayout>

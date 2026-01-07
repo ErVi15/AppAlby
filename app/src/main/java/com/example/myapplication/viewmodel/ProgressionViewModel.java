@@ -78,7 +78,9 @@ public class ProgressionViewModel extends AndroidViewModel {
                             uiIds.clear();
                             uiIds.putAll(convertIdsToAdapterFormat(idMap));
 
-                            return convertToAdapterFormat(valueMap);
+                            TreeMap<String, List<String>> newMap = new TreeMap<>(Collections.reverseOrder());
+                            newMap.putAll(convertToAdapterFormat(valueMap));
+                            return newMap;
                         }));
 
 
@@ -249,8 +251,8 @@ public class ProgressionViewModel extends AndroidViewModel {
 // ...
 
         LineDataSet maxDataSet2 = new LineDataSet(maxEntries2, "Record");
-        maxDataSet2.setColor(Color.CYAN); // colore linea
-        maxDataSet2.setCircleColor(Color.CYAN); // colore punti
+        maxDataSet2.setColor(Color.parseColor("#ADD8E6")); // colore linea
+        maxDataSet2.setCircleColor(Color.parseColor("#ADD8E6")); // colore punti
         maxDataSet2.setLineWidth(2f);
         maxDataSet2.setCircleRadius(4f);
         maxDataSet2.setDrawValues(false); //elimina la targhette con i valori sopra ogni punto
@@ -281,7 +283,7 @@ public class ProgressionViewModel extends AndroidViewModel {
         TreeMap<String, List<String>> newMap = new TreeMap<>();
 
         SimpleDateFormat sdf =
-                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         for (Map.Entry<Date, List<String>> entry : target.entrySet()) {
 
@@ -324,7 +326,7 @@ public class ProgressionViewModel extends AndroidViewModel {
 
         Map<String, List<Long>> newMap = new HashMap<>();
         SimpleDateFormat sdf =
-                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         for (Map.Entry<Date, List<Long>> entry : target.entrySet()) {
 
@@ -341,7 +343,7 @@ public class ProgressionViewModel extends AndroidViewModel {
     public Date parseDateWithoutTime(String dateString)  {
 
         SimpleDateFormat sdf =
-                new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
         try {
             Date parsedDate = sdf.parse(dateString);

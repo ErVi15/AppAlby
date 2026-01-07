@@ -206,17 +206,17 @@ public class SecondFragment extends Fragment {
                 case ALLENAMENTO_IRREGOLARE:
                 case SOVRACCARICO_STASI:
                 case POTENZIALE_NON_CONSOLIDATO:
-                    textState.setTextColor(Color.YELLOW);
+                    textState.setTextColor(Color.parseColor("#EAD895"));
                     break;
                 case PROGRESSO_SANO:
-                    textState.setTextColor(Color.GREEN);
+                    textState.setTextColor(Color.parseColor("#006400"));
                     break;
                 case REGRESSIONE:
                     textState.setTextColor(Color.RED);
                     break;
                 case AGGIUNGI_ALTRI_GIORNI:
                 case RIPRESA_DOPO_PAUSA:
-                    textState.setTextColor(Color.CYAN);
+                    textState.setTextColor(Color.parseColor("#ADD8E6"));
                     break;
             }
 
@@ -234,16 +234,16 @@ public class SecondFragment extends Fragment {
                 }
                 textMediana.setText(String.valueOf(feedback.getMediana())+" ("+uMisura+")");
                 if(feedback.getMediana()>valore_desiderato && valore_desiderato!=0){
-                    textMediana.setTextColor(Color.GREEN);
+                    textMediana.setTextColor(Color.parseColor("#006400"));
                 }else {
-                    textMediana.setTextColor(Color.BLACK);
+                    textMediana.setTextColor(Color.DKGRAY);
                 }
 
                 textWeekMax.setText(String.valueOf(feedback.getWeekMax())+" ("+uMisura+")");
                 if(feedback.getWeekMax()>valore_desiderato && valore_desiderato!=0){
-                    textWeekMax.setTextColor(Color.GREEN);
+                    textWeekMax.setTextColor(Color.parseColor("#006400"));
                 } else {
-                    textWeekMax.setTextColor(Color.BLACK);
+                    textWeekMax.setTextColor(Color.DKGRAY);
                 }
             } else {
                 // Valore null → puoi mostrare testo di default o vuoto
@@ -254,9 +254,9 @@ public class SecondFragment extends Fragment {
 
             textCostanza.setText(String.valueOf((int) Math.round(feedback.getCostanza()*100))+"%");
             if((feedback.getCostanza()*100)>costanza_desiderata && costanza_desiderata!=0){
-                textCostanza.setTextColor(Color.GREEN);
+                textCostanza.setTextColor(Color.parseColor("#006400"));
             } else {
-                textCostanza.setTextColor(Color.BLACK);
+                textCostanza.setTextColor(Color.DKGRAY);
             }
 
             if(valore_desiderato!=0){
@@ -281,14 +281,17 @@ public class SecondFragment extends Fragment {
             xAxis.setGranularityEnabled(true);     // forza l'uso della granularità
             xAxis.setAxisMinimum(1f); //fa partire l'asse orizzontale da 1
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //mette l'ascissa sotto
+            xAxis.setAxisLineWidth(2f);
             YAxis leftAxis = lineChart.getAxisLeft();
             YAxis rightAxis =  lineChart.getAxisRight();
 
 
-            rightAxis.setEnabled(false);   // disabilita asse destro
-
+            rightAxis.setEnabled(true);   // disabilita asse destro
+            rightAxis.setGranularity(1f);
+            rightAxis.setGranularityEnabled(true);
+            rightAxis.setAxisLineWidth(2f);
             leftAxis.setSpaceTop(20f); // percentuale di spazio
-            leftAxis.setEnabled(true);     // esplicito, per chiarezza
+            leftAxis.setEnabled(false);     // esplicito, per chiarezza
 
 
 

@@ -11,34 +11,38 @@ android:padding="8dp">
         android:id="@+id/itemText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
         android:text="Elemento"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemButton2"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <Button
-    android:id="@+id/itemButton"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="Elimina"
-        android:backgroundTint="@color/red"
-    app:layout_constraintEnd_toEndOf="parent"
-    app:layout_constraintTop_toTopOf="parent"
-    app:layout_constraintBottom_toBottomOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.5"/>
 
     <Button
         android:id="@+id/itemButton2"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:text="Modifica"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/itemButton"
+        android:text="Modify"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@id/itemText"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/itemButton"
+        android:layout_marginEnd="4dp"/>
+
+    <Button
+        android:id="@+id/itemButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Delete"
+        android:textSize="10sp"
+        android:backgroundTint="@color/red"
+        app:layout_constraintStart_toEndOf="@id/itemButton2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="4dp"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

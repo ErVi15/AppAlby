@@ -148,12 +148,22 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             tvNumber = itemView.findViewById(R.id.tvNumber);
             btnDelete = itemView.findViewById(R.id.btnDelete);
             btnDelete.setOnClickListener(v -> {
-                int posiz=getAdapterPosition();
-                if (posiz != RecyclerView.NO_POSITION) {
-                    EntryItem item = (EntryItem) items.get(posiz);
-                    int real_posiz=getRealPosition(items, posiz);
-                    listener.onDeleteItem(item.getDay(), real_posiz);
+                int pos=getBindingAdapterPosition();
+                if (pos == RecyclerView.NO_POSITION) return;
+
+                ListItem li = items.get(pos);
+                if (!(li instanceof EntryItem)) return;
+
+                EntryItem entry = (EntryItem) li;
+
+                int indexInDay = 0;
+                for (int i = pos - 1; i >= 0; i--) {
+                    ListItem prev = items.get(i);
+                    if (prev instanceof DayItem) break;
+                    if (prev instanceof EntryItem) indexInDay++;
                 }
+
+                listener.onDeleteItem(entry.getDay(), indexInDay);
             });
         }
 
