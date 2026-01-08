@@ -30,10 +30,19 @@
 
     <Button
         android:id="@+id/input3"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Reset"
-        />
+        android:textSize="14sp"
+        android:textColor="@android:color/black"
+        android:background="#33FFFFFF"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
+        android:elevation="2dp"
+        android:layout_marginTop="16dp"
+        android:layout_gravity="start"/>
 
 
 

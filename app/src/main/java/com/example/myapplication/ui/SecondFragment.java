@@ -94,6 +94,13 @@ public class SecondFragment extends Fragment {
         adapter = new MyAdapter2(new TreeMap<>(), this::removeItem);
         recyclerView.setAdapter(adapter);
         View indicator = binding.buttonSecond.findViewById(R.id.view_feedback_indicator);
+        // Creo il BottomSheetDialog
+        BottomSheetDialog bottomSheet = new BottomSheetDialog(requireContext());
+
+        // Inflato il layout
+        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottomsheet_feedback, null);
+
+
         ObjectAnimator blinkAnim = ObjectAnimator.ofFloat(indicator, "alpha", 1f, 0f);
         MaterialTextView emptyText= view.findViewById(R.id.emptyText2);
 
@@ -141,6 +148,71 @@ public class SecondFragment extends Fragment {
         }
 
 
+        //bottone soglia
+        ImageButton button_settings = view.findViewById(R.id.settingsButton);
+        button_settings.setOnClickListener(btn-> {
+
+            View alertView = getLayoutInflater().inflate(R.layout.preference_settings, null);
+
+            EditText valore_desiderato = alertView.findViewById(R.id.input1);
+            EditText costanza_desiderata = alertView.findViewById(R.id.input2);
+            Button button_reset = alertView.findViewById(R.id.input3);
+
+            button_reset.setOnClickListener(btn2 -> {
+
+                TextView textMediana = bottomSheetView.findViewById(R.id.text_mediana);
+                TextView textWeekMax = bottomSheetView.findViewById(R.id.text_week_max);
+                TextView textCostanza = bottomSheetView.findViewById(R.id.text_costanza);
+
+                TextView textMedianaSoglia = bottomSheetView.findViewById(R.id.text_mediana_soglia);
+                TextView textWeekMaxSoglia = bottomSheetView.findViewById(R.id.soglia_text_week_max);
+                TextView textCostanzaSoglia = bottomSheetView.findViewById(R.id.soglia_text_costanza);
+
+                // 1️⃣ reset soglie nel viewModel
+                viewModel.setValoreDesiderato(0);
+                viewModel.setCostanzaDesiderata(0);
+
+                // 2️⃣ aggiorna la UI come se non ci fossero soglie
+                textWeekMaxSoglia.setText("");
+                textMedianaSoglia.setText("");
+                textCostanzaSoglia.setText("");
+
+                // 3️⃣ aggiorna colori dei valori principali
+                textMediana.setTextColor(Color.DKGRAY);
+                textWeekMax.setTextColor(Color.DKGRAY);
+                textCostanza.setTextColor(Color.DKGRAY);
+                Toast.makeText(requireContext(), "Obiettivi resettati", Toast.LENGTH_SHORT).show();
+
+
+            });
+
+
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Impostazioni")
+                    .setView(alertView)
+                    .setPositiveButton("OK", (dialog, which) -> {
+                        try{
+                            int obb_val_tipico = Integer.parseInt(valore_desiderato.getText().toString());
+                            int obb_soglia = Integer.parseInt(costanza_desiderata.getText().toString());
+
+                            // Passo tutto al viewModel
+                            this.viewModel.setCostanzaDesiderata(obb_soglia);
+                            this.viewModel.setValoreDesiderato(obb_val_tipico);
+                            this.viewModel.updateProgression();
+
+
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(requireContext(),
+                                    "Valore non valido (inserisci numeri interi)",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    })
+                    .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())
+                    .show();
+        });
+
+
+
         binding.buttonSecond.setOnClickListener(v -> {
             ProgressFeedback feedback = viewModel.getFinalFeedback();
             if (feedback == null) {
@@ -152,11 +224,6 @@ public class SecondFragment extends Fragment {
             indicator.setBackgroundResource(R.drawable.bg_feedback_indicator);
             blinkAnim.pause();
 
-            // Creo il BottomSheetDialog
-            BottomSheetDialog bottomSheet = new BottomSheetDialog(requireContext());
-
-            // Inflato il layout
-            View bottomSheetView = getLayoutInflater().inflate(R.layout.bottomsheet_feedback, null);
 
             // Popolo le TextView
             TextView textState = bottomSheetView.findViewById(R.id.text_feedback_state);
@@ -172,60 +239,6 @@ public class SecondFragment extends Fragment {
             TextView textWeekMaxSoglia = bottomSheetView.findViewById(R.id.soglia_text_week_max);
             TextView textCostanzaSoglia = bottomSheetView.findViewById(R.id.soglia_text_costanza);
 
-            //bottone soglia
-            ImageButton button_settings = view.findViewById(R.id.settingsButton);
-            button_settings.setOnClickListener(btn-> {
-
-                View alertView = getLayoutInflater().inflate(R.layout.preference_settings, null);
-
-                EditText valore_desiderato = alertView.findViewById(R.id.input1);
-                EditText costanza_desiderata = alertView.findViewById(R.id.input2);
-                Button button_reset = alertView.findViewById(R.id.input3);
-
-                button_reset.setOnClickListener(btn2 -> {
-
-                    // 1️⃣ reset soglie nel viewModel
-                    viewModel.setValoreDesiderato(0);
-                    viewModel.setCostanzaDesiderata(0);
-
-                    // 2️⃣ aggiorna la UI come se non ci fossero soglie
-                    textWeekMaxSoglia.setText("");
-                    textMedianaSoglia.setText("");
-                    textCostanzaSoglia.setText("");
-
-                    // 3️⃣ aggiorna colori dei valori principali
-                    textMediana.setTextColor(Color.DKGRAY);
-                    textWeekMax.setTextColor(Color.DKGRAY);
-                    textCostanza.setTextColor(Color.DKGRAY);
-                    Toast.makeText(requireContext(), "Obiettivi resettati", Toast.LENGTH_SHORT).show();
-
-
-                });
-
-
-                new AlertDialog.Builder(requireContext())
-                        .setTitle("Impostazioni")
-                        .setView(alertView)
-                        .setPositiveButton("OK", (dialog, which) -> {
-                            try{
-                                int obb_val_tipico = Integer.parseInt(valore_desiderato.getText().toString());
-                                int obb_soglia = Integer.parseInt(costanza_desiderata.getText().toString());
-
-                                // Passo tutto al viewModel
-                                this.viewModel.setCostanzaDesiderata(obb_soglia);
-                                this.viewModel.setValoreDesiderato(obb_val_tipico);
-                                this.viewModel.updateProgression();
-
-
-                            } catch (NumberFormatException e) {
-                                Toast.makeText(requireContext(),
-                                        "Valore non valido (inserisci numeri interi)",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())
-                        .show();
-            });
 
 
 
