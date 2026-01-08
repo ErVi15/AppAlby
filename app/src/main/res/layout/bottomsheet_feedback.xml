@@ -114,7 +114,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:text="Record ultimi 7 giorni"
+                    android:text="Record ultimi sette giorni"
                     android:textSize="13sp"
                     android:textStyle="bold"
                     android:layout_width="wrap_content"

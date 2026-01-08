@@ -155,12 +155,12 @@ public class FirstFragment extends Fragment {
                     case "Coppia":
                         toggleDesc.setText("Serie x Ripetizioni");
                         inputUMisura.getText().clear();
-                        inputUMisura.setVisibility(GONE);
+                        //inputUMisura.setVisibility(GONE);
                         break;
                     case "Tripla":
                         toggleDesc.setText("Serie x Ripetizioni x Peso");
                         inputUMisura.getText().clear();
-                        inputUMisura.setVisibility(GONE);
+                        //inputUMisura.setVisibility(GONE);
                         break;
                 }
             }

@@ -30,7 +30,7 @@
         android:id="@+id/emptyText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text='Premi il tasto + per aggiungerne una progressione.\n\n(Info sul funzionamento in "\u22EE")'
+        android:text='Premi il tasto + per aggiungerne una progressione.\n\n(Info sui tipi di progressione in "\u22EE")'
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         android:gravity="center"

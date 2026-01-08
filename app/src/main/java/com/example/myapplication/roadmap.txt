@@ -45,6 +45,10 @@ FATTO
 -nel nuova progressione il radio button su opzione 1 deve essere checekd di default
 FATTO
 
+-tema scuro
+-lingua selettore e lingua inglese
+-inversione del comparatore per misurare serie non solo di cui si vuole portare a una crescite, ma anche diminuzione
+
 bug: cancellamento entry non funziona dopo aver aggiunto altre in modo random. Se clicchi le prime dell elenco torna a funzinoare
 
 controllare il caso di lista con intervalli di settimane vuote se visualizzate bene, e cercare di avere una granularità migliore
