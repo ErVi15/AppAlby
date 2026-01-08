@@ -6,7 +6,7 @@
     <string name="first_fragment_label">First Fragment</string>
     <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
-    <string name="previous">Resoconto</string>
+    <string name="previous">Review</string>
     <string name="fab_add">Aggiungi elemento</string>
     <string name="legenda">(Ogni punto rappresenta un resoconto di sette giorni. L’andamento procede per intervalli di sette giorni alla volta.\nPer le info complete consulta \u22EE in alto a destra)</string>
 
