@@ -115,6 +115,10 @@ public class StatsCalculator {
                 intervalMap.put(lastEntry.getKey(), lastEntry.getValue());
             } else {
                 while (lastEntry.getKey().before(intervalStart)) {
+
+                    if (result.size() >= 26) {
+                        return result; // esci subito
+                    }
                     result.add(intervalMap);
                     intervalMap=new TreeMap<>();
 
@@ -141,7 +145,10 @@ public class StatsCalculator {
                 intervalMap.put(lastEntry.getKey(), lastEntry.getValue());
             }
         }
-        result.add(intervalMap);
+
+        if (result.size() < 26) {
+            result.add(intervalMap);
+        }
         return result;
     }
 
