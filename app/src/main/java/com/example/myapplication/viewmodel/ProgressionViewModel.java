@@ -224,7 +224,7 @@ public class ProgressionViewModel extends AndroidViewModel {
 
         //Data set per mediane
         List<Entry> medianaEntries = new ArrayList<>();
-        int i=0;
+        int i=1;
         for(Integer[] e: median_max_of_weeks){
             medianaEntries.add(new Entry(i, e[0]));
             i++;
@@ -243,7 +243,7 @@ public class ProgressionViewModel extends AndroidViewModel {
         //DAta set per massimi
 
         List<Entry> maxEntries2 = new ArrayList<>();
-        int j=0;
+        int j=1;
         for(Integer[] e: median_max_of_weeks){
             maxEntries2.add(new Entry(j, e[1]));
             j++;

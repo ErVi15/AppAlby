@@ -47,20 +47,25 @@ FATTO
 
 bug: cancellamento entry non funziona dopo aver aggiunto altre in modo random. Se clicchi le prime dell elenco torna a funzinoare
 
+controllare il caso di lista con intervalli di settimane vuote se visualizzate bene, e cercare di avere una granularità migliore
 
-scegliere le parole gisute per il feedback:
--no giudizi
+scegliere le parole giuste per il feedback:
+-no giudizi diretti
 -votati ad essere informativi e positivi
+-pareri dando del tu al lettore
+-il loro scopo è descrivere un confronto con i sette giorni precedenti e definire all'utente un trend mostrato
 -standardizzare l'uso di parole per concetti simili:
 settimana -> intervallo sette giorni,
-mediana->andamento tipico,
-lavorare sulla mediana significa->ricercare la costanza,
-massimo settimanale->record o picco
-lavorare sui picchi significa ->mettere alla prova ilproprio potenziale
+mediana->andamento tipico, o livello abituale
+delta mediana-> dà una misura del proprio andamento, cambio di abitudini, costanza o impegno
+massimo/record settimanale->potenziale dimostrato, quanto puoi margine si mostra
+delta massimo settimanale ->sforzo/ambizione
+
+-i nomi degli stati devono essere un aggettivo accattivante per l'utente, ad esempio animali, meme, modi di dire legati
 
 per i casi negativi
--ricordare che con pochi input il giudizio è incoerente
--ricordare l'utente che l'ottica di confronto è locale è meglio non dare peso a momenti di minimo tenere a mente la vista globale
+-ricordare all'utente che con pochi input il giudizio è incoerente
+-ricordare l'utente che il resoconto è un confronto locale, non importa un esito negativo una tantum, l'importante è mantenere tanti record neutri o positivi
 
 
 

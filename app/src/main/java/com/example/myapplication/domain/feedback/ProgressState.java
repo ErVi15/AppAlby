@@ -3,21 +3,21 @@ package com.example.myapplication.domain.feedback;
 
 public enum ProgressState {
 
-    PROGRESSO_SANO("Stai spingendo e assimilando, apprendimento corretto", "Suggerimento: continua così"),//DX>0, DM>0
-    POTENZIALE_NON_CONSOLIDATO("Riesci a raggiungere nuovi massimi, ma non li rendi stabili","Suggerimento: lavora di più con valori di confort, devi rendere il tuo andamento stabile"),//DX>0, DM CIRCA 0
-    SOVRACCARICO_STASI("Performance stabile","Suggerimento: complimenti, sei perfettamente a tuo agio! ma se intendi migliorare ancora devi aggiungere variazioni, dare nuovi stimoli"),//DX CIRCA 0, DM CIRCA 0
-    ALLENAMENTO_IRREGOLARE("Miglioramenti saltuari","Suggerimento: cerca di lavorare tutti i giorni con lo stesso effort"),//DX>0, DM CIRCA 0
-    REGRESSIONE("Fatica accumulata o carico eccessivo","Suggerimento: rilassati, abbassa la complessità dell'esercizio, e cura pulizia e rilassamento"),//DX<0, DM<0
+    STONKS("Stai spingendo e assimilando il tuo livello abituale, stai ampliando il tuo potenziale", "Suggerimento: continua così"),//DX>0, DM>0
+    EMERGENTE("Spesso mostri margine di miglioramento, ma resti stabile","Suggerimento: è il momento per fare definitivamente tuoi questi record, concentrati sulla stabilità del tuo andamento"),//DX>0, DM CIRCA 0
+    CONFORT_ZONE("Performance stabile","Suggerimento: ottimo, sei perfettamente a tuo agio! Se vuoi evolvere, prova delle variazioni, nuovi stimoli."),//DX CIRCA 0, DM CIRCA 0
+    ALTALENANTE("Stai mostrando rogressi alterni","Suggerimento: cerca di lavorare tutti i giorni con lo stesso effort"),//DX>0, DM CIRCA 0
+    IN_CALO("Stai mostrando un calo temporaneo, ma il tuo potenziale rimane","Suggerimento: Rallenta un po’ e cura la costanza. Ricorda che un singolo intervallo negativo non cambia il trend"),//DX<0, DM<0
     RIPRESA_DOPO_PAUSA("I dati recenti seguono un periodo di inattività.","Suggerimento: inserire dati almeno per due giorni per cambiare resoconto"),
-    AGGIUNGI_ALTRI_GIORNI("Hai iniziato da poco la progressione i dati non sarebbero indicativi", "Suggerimento: fai passare almeno 7 giorni dal primo valore inserito"),
+    AGGIUNGI_ALTRI_GIORNI("Hai iniziato da poco, i dati iniziali non definiscono ancora un trend", "Suggerimento: fai passare almeno 7 giorni dal primo valore inserito"),
 
-    AFFATICAMENTO_PASSIVO("C'è del potenziale evidente ma i carichi sono alti" ,"Suggerimento: rallenta leggermente, punta alla costanza"),
+    AFFATICATO("C'è del potenziale evidente ma il tuo livello abiutale ne risente" ,"Suggerimento: rallenta leggermente, punta alla costanza, anche se un intervallo sembra negativo l'importante sono i progressi sul lungo termine"),
 
-    RECUPERO_SENZA_STIMOLO("Stai lavorando benissimo sulla tua costanza, i record non sono l'obiettivo in questa fase","Suggerimento: puoi sperimentare nuovi stimoli o variare leggermente l’intensità"),
+    CONSOLIDAMENTO("Stai lavorando benissimo sulla tua costanza, i record non sono l'obiettivo in questa fase","Suggerimento: se lo desideri puoi sperimentare nuovi stimoli o aumentare leggermente l’intensità"),
 
-    PERDITA_DI_PICCO("Sei stabile ma i picchi non sono stabili","Suggerimento: potresti inserire stimoli"),
+    ABITUALE("Sei stabile ma il margine di miglioramento si riduce","Suggerimento: trova variazioni, nuovi stimoli, RISVEGLIA IL LEONE"),
 
-    ADATTMENTO_INCOERENTE("C'è molto potenziale, ma devi adattarti agli stimoli", "Suggerimento: insisti, e cerca regolarità");
+    FLUTTUANTE("Stai adattandoti agli stimoli, ma ricorda il tuo potenziale è lì", "Suggerimento: insisti, e cerca regolarità, RICORDATI CHI SEI");
 
     private final String description;
     private final String sugguestion;

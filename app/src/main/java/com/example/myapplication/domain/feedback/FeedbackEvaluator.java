@@ -3,7 +3,6 @@ package com.example.myapplication.domain.feedback;
 import com.example.myapplication.domain.stat.StatsCalculator;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TreeMap;
@@ -45,7 +44,7 @@ import java.util.TreeMap;
 
             ArrayList<TreeMap<Date, Integer>> treeMapArrayList=new ArrayList<>();
 
-            for(TreeMap<Date, List<String>> e: calculator.splitMapBy7Days(map)){
+            for(TreeMap<Date, List<String>> e: calculator.splitMapBy7Days2(map)){
                 treeMapArrayList.add(calculator.calculateMeanOfDays(e));
             }
 
@@ -101,31 +100,31 @@ import java.util.TreeMap;
                 if(week.getActive_days()>0.25) {
 
                     if (dxStatic && dmStatic) {
-                        week.setState(ProgressState.SOVRACCARICO_STASI);
+                        week.setState(ProgressState.CONFORT_ZONE);
 
                     } else if (dxStatic && !dmStatic && dm < 0) {
-                        week.setState(ProgressState.AFFATICAMENTO_PASSIVO);
+                        week.setState(ProgressState.AFFATICATO);
 
                     } else if (dxStatic && !dmStatic && dm > 0) {
-                        week.setState(ProgressState.RECUPERO_SENZA_STIMOLO);
+                        week.setState(ProgressState.CONSOLIDAMENTO);
 
                     } else if (!dxStatic && dmStatic && dx < 0) {
-                        week.setState(ProgressState.PERDITA_DI_PICCO);
+                        week.setState(ProgressState.ABITUALE);
 
                     } else if (!dxStatic && dmStatic && dx > 0) {
-                        week.setState(ProgressState.POTENZIALE_NON_CONSOLIDATO);
+                        week.setState(ProgressState.EMERGENTE);
 
                     } else if (dx > 0 && dm > 0) {
-                        week.setState(ProgressState.PROGRESSO_SANO);
+                        week.setState(ProgressState.STONKS);
 
                     } else if (dx > 0 && dm < 0) {
-                        week.setState(ProgressState.ALLENAMENTO_IRREGOLARE);
+                        week.setState(ProgressState.ALTALENANTE);
 
                     } else if (dx < 0 && dm < 0) {
-                        week.setState(ProgressState.REGRESSIONE);
+                        week.setState(ProgressState.IN_CALO);
 
                     } else {
-                        week.setState(ProgressState.ADATTMENTO_INCOERENTE);
+                        week.setState(ProgressState.FLUTTUANTE);
                     }
 
 

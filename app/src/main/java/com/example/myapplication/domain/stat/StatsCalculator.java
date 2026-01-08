@@ -44,46 +44,108 @@ public class StatsCalculator {
 
     public ArrayList<TreeMap<Date, List<String>>> splitMapBy7Days(TreeMap<Date, List<String>> map) {
         ArrayList<TreeMap<Date, List<String>>> result = new ArrayList<>();
-        if (map.isEmpty()) return result;
+        if (map.isEmpty()) return result; //se mappa è vuota return lista vuota
 
-        Calendar cal = Calendar.getInstance();
-        Date to = map.lastKey();
-        cal.setTime(to); //ultima data inserita segnata, e aggiornata su calendar
-        cal.add(Calendar.DAY_OF_MONTH, -7); //calcolo la data di sette giorni prima
-        Date from = cal.getTime(); // imposto la data di inizio intervallo
-        //strutture di appoggio
-        TreeMap<Date, List<String>> weekMap=new TreeMap<>();
-        Iterator<Map.Entry<Date, List<String>>> iter = map.descendingMap().entrySet().iterator();
+        // lavoriamo a partire dall'ultima data inserita
+        NavigableMap<Date, List<String>> descendingMap = map.descendingMap();
+        Iterator<Map.Entry<Date, List<String>>> iter = descendingMap.entrySet().iterator(); //preparo un iterator che contiene i dati della lista ribaltata (cosi gli intervalli partono a ritroso)
 
-        while(iter.hasNext() && result.size()<=26){ //mostra massimo 6 mesi
-            Map.Entry<Date,List<String>> element=iter.next();
-            if(!element.getKey().before(from)){
-                weekMap.put(element.getKey(), element.getValue());
-                iter.remove();
-            } else{
-                result.add(new TreeMap<>(weekMap));
-                weekMap.clear();
+        while (iter.hasNext()) { //finche l'iterator ha element
+            TreeMap<Date, List<String>> intervalMap = new TreeMap<>(); //mappa d'appoggio che conterrà l'intervallo ritagliato
+            Map.Entry<Date, List<String>> lastEntry = iter.next(); //prendo l'ultimo elemento
+            Date intervalEnd = lastEntry.getKey(); //ricavo la chiave/data
+            intervalMap.put(intervalEnd, lastEntry.getValue()); //la inserisco come primo elemento della mappa d'appoggio
 
-                to=from;
-                cal.setTime(from);
-                cal.add(Calendar.DAY_OF_MONTH, -7);
-                from=cal.getTime();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(intervalEnd);
+            cal.add(Calendar.DAY_OF_MONTH, -6); // intervallo di 7 giorni
+            Date intervalStart = cal.getTime();
 
-                //l'elemento finale non è incluso dall'if, e finisce qui
-                if (!element.getKey().before(from)) {
-                    weekMap.put(element.getKey(), element.getValue());
-                    iter.remove();
+            // raccogli le date dentro l'intervallo
+            while (iter.hasNext()) {
+                Map.Entry<Date, List<String>> entry = iter.next();
+                Date date = entry.getKey();
+
+                if (!date.before(intervalStart)) {
+                    intervalMap.put(date, entry.getValue());
+                } else {
+                    if(intervalMap.isEmpty()){
+                        intervalMap.put(intervalEnd, new ArrayList<>(List.of("0")));
+                    }
+                    break; // esci, questa data sarà per il prossimo intervallo
                 }
             }
 
-            if (!weekMap.isEmpty()) {
-                result.add(new TreeMap<>(weekMap));
-            }
+            result.add(intervalMap);
         }
-
 
         return result;
     }
+
+    public ArrayList<TreeMap<Date, List<String>>> splitMapBy7Days2(TreeMap<Date, List<String>> map) {
+        ArrayList<TreeMap<Date, List<String>>> result = new ArrayList<>();
+        if (map.isEmpty()) return result; //se mappa è vuota return lista vuota
+
+        // lavoriamo a partire dall'ultima data inserita
+        NavigableMap<Date, List<String>> descendingMap = map.descendingMap();
+        Iterator<Map.Entry<Date, List<String>>> iter = descendingMap.entrySet().iterator(); //preparo un iterator che contiene i dati della lista ribaltata (cosi gli intervalli partono a ritroso)
+
+        TreeMap<Date, List<String>> intervalMap = new TreeMap<>();
+        Date intervalEnd = null;
+        Date intervalStart = null;
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        while (iter.hasNext()) { //finche l'iterator ha element
+            //mappa d'appoggio che conterrà l'intervallo ritagliato
+            Map.Entry<Date, List<String>> lastEntry = iter.next(); //prendo l'ultimo elemento
+            if (intervalEnd == null) {
+                intervalEnd = lastEntry.getKey();
+
+                cal.setTime(intervalEnd);
+                cal.add(Calendar.DAY_OF_MONTH, -6); // intervallo di 7 giorni
+                //dovresti azzerare secondi
+                intervalStart = cal.getTime();
+                intervalMap.put(lastEntry.getKey(), lastEntry.getValue());
+
+            } else if (!lastEntry.getKey().before(intervalStart)) {
+                intervalMap.put(lastEntry.getKey(), lastEntry.getValue());
+            } else {
+                while (lastEntry.getKey().before(intervalStart)) {
+                    result.add(intervalMap);
+                    intervalMap=new TreeMap<>();
+
+
+
+                    //aggiorno gli intervalli con -1 e -6
+                    cal.setTime(intervalStart);
+                    cal.add(Calendar.DAY_OF_MONTH, -1);
+                    intervalEnd = intervalStart;
+
+                    cal.setTime(intervalEnd);
+                    cal.add(Calendar.DAY_OF_MONTH, -6); // intervallo di 7 giorni
+                    //dovresti azzerare secondi
+                    intervalStart = cal.getTime();
+
+                    intervalMap.put(intervalEnd, List.of("0"));
+
+
+                }
+
+                //ho trovato un intervallo incui sta il next(), tolgo l'entry template vuoto
+                intervalMap.clear();
+                //e valorizzo al suo posto col valore next()
+                intervalMap.put(lastEntry.getKey(), lastEntry.getValue());
+            }
+        }
+        result.add(intervalMap);
+        return result;
+    }
+
 
     public TreeMap<Date, Integer> calculateMeanOfDays(
             TreeMap<Date, List<String>> map) {

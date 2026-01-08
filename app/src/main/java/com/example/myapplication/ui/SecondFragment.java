@@ -6,22 +6,17 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +35,6 @@ import com.google.android.material.textview.MaterialTextView;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -215,17 +209,17 @@ public class SecondFragment extends Fragment {
 
             textState.setText(feedback.getState().name().replace("_", " "));
             switch(feedback.getState()) {
-                case ALLENAMENTO_IRREGOLARE:
-                case SOVRACCARICO_STASI:
-                case AFFATICAMENTO_PASSIVO:
+                case ALTALENANTE:
+                case CONFORT_ZONE:
+                case AFFATICATO:
                     textState.setTextColor(Color.parseColor("#EAD895"));
                     break;
-                case PROGRESSO_SANO:
-                case POTENZIALE_NON_CONSOLIDATO:
-                case RECUPERO_SENZA_STIMOLO:
+                case STONKS:
+                case EMERGENTE:
+                case CONSOLIDAMENTO:
                     textState.setTextColor(Color.parseColor("#006400"));
                     break;
-                case REGRESSIONE:
+                case IN_CALO:
                     textState.setTextColor(Color.RED);
                     break;
                 case AGGIUNGI_ALTRI_GIORNI:
@@ -293,7 +287,6 @@ public class SecondFragment extends Fragment {
             XAxis xAxis = lineChart.getXAxis();
             xAxis.setGranularity(1f);              // passo minimo = 1
             xAxis.setGranularityEnabled(true);     // forza l'uso della granularità
-            xAxis.setAxisMinimum(1f); //fa partire l'asse orizzontale da 1
             xAxis.setPosition(XAxis.XAxisPosition.BOTTOM); //mette l'ascissa sotto
             xAxis.setAxisLineWidth(2f);
             YAxis leftAxis = lineChart.getAxisLeft();
@@ -306,6 +299,10 @@ public class SecondFragment extends Fragment {
             rightAxis.setAxisLineWidth(2f);
             leftAxis.setSpaceTop(20f); // percentuale di spazio
             leftAxis.setEnabled(false);     // esplicito, per chiarezza
+
+            leftAxis.setGranularity(1f); // intervallo minimo tra tick = 1
+            leftAxis.setGranularityEnabled(true);
+            leftAxis.setAxisMinimum(0f); // se vuoi partire da 0
 
 
 
