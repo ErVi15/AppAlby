@@ -5,12 +5,12 @@ import java.util.Date;
 
 //classe che impacchetta il risultato e sarà il return di FeedbackEvaluator
 public class ProgressFeedback {
-    private float stabilità; //solidità: quanto ti avvicini di media al tuo max
-    private int mediana; //i tuoi valori tipici
-    private int week_max; //il tuo record settimanale
-    private float costanza; //quanti giorni sei attivo in una settimana
-    private int active_days;
-    private Date starting_day;
+    private final float stabilità; //solidità: quanto ti avvicini di media al tuo max
+    private final int mediana; //i tuoi valori tipici
+    private final int week_max; //il tuo record settimanale
+    private final float costanza; //quanti giorni sei attivo in una settimana
+    private final int active_days;
+    private final Date starting_day;
 
     private ProgressState state;
     private String desc;

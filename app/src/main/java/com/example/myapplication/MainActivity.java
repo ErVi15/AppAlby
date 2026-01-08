@@ -4,16 +4,11 @@ import android.app.AlertDialog;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.view.View;
-
-import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
@@ -21,7 +16,6 @@ import com.example.myapplication.databinding.ActivityMainBinding;
 
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.RadioButton;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -71,27 +65,6 @@ public class MainActivity extends AppCompatActivity {
                 // Mostra FAB
                 binding.fab.show();
 
-//                binding.fab.setOnClickListener(v -> {
-//                    Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
-//
-//                    if (navHostFragment instanceof NavHostFragment) {
-//                        Fragment currentFragment =
-//                                ((NavHostFragment) navHostFragment)
-//                                        .getChildFragmentManager()
-//                                        .getFragments()
-//                                        .get(0);
-//
-//                        System.out.println("Fragment perceived: " + currentFragment.toString());
-//                        if (currentFragment instanceof FirstFragment) {
-//                            System.out.println("FirstFragment Instance is perceived");
-//                            ((FirstFragment) currentFragment).addNewItem();
-//                        } else if (currentFragment instanceof SecondFragment) {
-//                            System.out.println("SecondFragment Instance is perceived");
-//                            ((SecondFragment) currentFragment).addNewItem();
-//                        }
-//                    }
-//                    Snackbar.make(v, "Azione del primo fragment", Snackbar.LENGTH_LONG).show();
-//                });
             } else {
                 // Nascondi FAB negli altri fragment
                 binding.fab.hide();

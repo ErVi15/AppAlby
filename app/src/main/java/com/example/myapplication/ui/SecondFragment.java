@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -179,6 +180,27 @@ public class SecondFragment extends Fragment {
 
                 EditText valore_desiderato = alertView.findViewById(R.id.input1);
                 EditText costanza_desiderata = alertView.findViewById(R.id.input2);
+                Button button_reset = alertView.findViewById(R.id.input3);
+
+                button_reset.setOnClickListener(btn2 -> {
+
+                    // 1️⃣ reset soglie nel viewModel
+                    viewModel.setValoreDesiderato(0);
+                    viewModel.setCostanzaDesiderata(0);
+
+                    // 2️⃣ aggiorna la UI come se non ci fossero soglie
+                    textWeekMaxSoglia.setText("");
+                    textMedianaSoglia.setText("");
+                    textCostanzaSoglia.setText("");
+
+                    // 3️⃣ aggiorna colori dei valori principali
+                    textMediana.setTextColor(Color.DKGRAY);
+                    textWeekMax.setTextColor(Color.DKGRAY);
+                    textCostanza.setTextColor(Color.DKGRAY);
+                    Toast.makeText(requireContext(), "Obiettivi resettati", Toast.LENGTH_SHORT).show();
+
+
+                });
 
 
                 new AlertDialog.Builder(requireContext())
@@ -231,7 +253,7 @@ public class SecondFragment extends Fragment {
             //qui devi modificare la gestione visiva della soglia
             textDescription.setText(feedback.getState().getDescription());
             textSuggestion.setText(feedback.getState().getSugguestion());
-            textStabilita.setText(String.valueOf((int) Math.round(feedback.getStabilità()*100))+"%");
+            textStabilita.setText(Math.round(feedback.getStabilità() * 100) +"%");
             String uMisura=viewModel.getUMisura(currentId);
             long valore_desiderato= viewModel.getValoreDesiderato();
             long costanza_desiderata= viewModel.getCostanzaDesiderata();
@@ -240,14 +262,14 @@ public class SecondFragment extends Fragment {
                 if(uMisura.length()>=4) {
                     uMisura = uMisura.substring(0, 3);
                 }
-                textMediana.setText(String.valueOf(feedback.getMediana())+" ("+uMisura+")");
+                textMediana.setText(feedback.getMediana() +" ("+uMisura+")");
                 if(feedback.getMediana()>valore_desiderato && valore_desiderato!=0){
                     textMediana.setTextColor(Color.parseColor("#006400"));
                 }else {
                     textMediana.setTextColor(Color.DKGRAY);
                 }
 
-                textWeekMax.setText(String.valueOf(feedback.getWeekMax())+" ("+uMisura+")");
+                textWeekMax.setText(feedback.getWeekMax() +" ("+uMisura+")");
                 if(feedback.getWeekMax()>valore_desiderato && valore_desiderato!=0){
                     textWeekMax.setTextColor(Color.parseColor("#006400"));
                 } else {
@@ -260,13 +282,12 @@ public class SecondFragment extends Fragment {
             }
 
 
-            textCostanza.setText(String.valueOf((int) Math.round(feedback.getCostanza()*100))+"%");
+            textCostanza.setText(Math.round(feedback.getCostanza() * 100) +"%");
             if((feedback.getCostanza()*100)>costanza_desiderata && costanza_desiderata!=0){
                 textCostanza.setTextColor(Color.parseColor("#006400"));
             } else {
                 textCostanza.setTextColor(Color.DKGRAY);
             }
-
             if(valore_desiderato!=0){
                 textWeekMaxSoglia.setText(String.valueOf(valore_desiderato));
                 textMedianaSoglia.setText(String.valueOf(valore_desiderato));
@@ -275,7 +296,7 @@ public class SecondFragment extends Fragment {
                 textMedianaSoglia.setText("");
             }
             if(costanza_desiderata!=0){
-                textCostanzaSoglia.setText(String.valueOf(costanza_desiderata)+"%");
+                textCostanzaSoglia.setText(costanza_desiderata +"%");
             } else {
                 textCostanzaSoglia.setText("");
             }
@@ -297,13 +318,8 @@ public class SecondFragment extends Fragment {
             rightAxis.setGranularity(1f);
             rightAxis.setGranularityEnabled(true);
             rightAxis.setAxisLineWidth(2f);
-            leftAxis.setSpaceTop(20f); // percentuale di spazio
+             // percentuale di spazio
             leftAxis.setEnabled(false);     // esplicito, per chiarezza
-
-            leftAxis.setGranularity(1f); // intervallo minimo tra tick = 1
-            leftAxis.setGranularityEnabled(true);
-            leftAxis.setAxisMinimum(0f); // se vuoi partire da 0
-
 
 
             LineData lineData = new LineData(viewModel.getDataSetForChart()[0], viewModel.getDataSetForChart()[1]);

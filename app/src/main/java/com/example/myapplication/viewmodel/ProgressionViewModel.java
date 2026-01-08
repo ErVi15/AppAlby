@@ -3,16 +3,12 @@ package com.example.myapplication.viewmodel;
 import android.app.Application;
 import android.graphics.Color;
 import android.util.Log;
-import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MediatorLiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
-import androidx.lifecycle.ViewModel;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.data.Progression;
 import com.example.myapplication.data.ProgressionEntry;
@@ -39,15 +35,15 @@ public class ProgressionViewModel extends AndroidViewModel {
 
     private MutableLiveData<TreeMap<String, List<String>>> uiData = new MutableLiveData<>(new TreeMap<>());
     private final Map<String, List<Long>> uiIds = new HashMap<>();
-    private ProgressionRepository repository;
-    private LiveData<List<Progression>> progression;
-    private LiveData<List<ProgressionEntry>> progression_entry;
+    private final ProgressionRepository repository;
+    private final LiveData<List<Progression>> progression;
+    private final LiveData<List<ProgressionEntry>> progression_entry;
     private final MutableLiveData<Long> selectedProgressionId =
             new MutableLiveData<>();
 
     private final MutableLiveData<Progression> selectedProgression = new MutableLiveData<>();
 
-    private FeedbackEvaluator feedback;
+    private final FeedbackEvaluator feedback;
     private Date custom_date;
 
 
@@ -222,13 +218,18 @@ public class ProgressionViewModel extends AndroidViewModel {
         ArrayList<Integer[]> median_max_of_weeks= feedback.prepareDataForChart(convertFromAdapterFormat(map)); //tutti i giorni separati per settimane, e convertiti a date integer
         Collections.reverse(median_max_of_weeks);
 
-        //Data set per mediane
+
         List<Entry> medianaEntries = new ArrayList<>();
+        List<Entry> maxEntries2 = new ArrayList<>();
         int i=1;
         for(Integer[] e: median_max_of_weeks){
             medianaEntries.add(new Entry(i, e[0]));
+            maxEntries2.add(new Entry(i, e[1]));
             i++;
         }
+
+
+        //DAta set per massimi
 
 // ...
 
@@ -239,15 +240,6 @@ public class ProgressionViewModel extends AndroidViewModel {
         medianaDataSet.setCircleRadius(3f);
         medianaDataSet.setDrawValues(false); //elimina la targhette con i valori sopra ogni punto
 
-
-        //DAta set per massimi
-
-        List<Entry> maxEntries2 = new ArrayList<>();
-        int j=1;
-        for(Integer[] e: median_max_of_weeks){
-            maxEntries2.add(new Entry(j, e[1]));
-            j++;
-        }
 // ...
 
         LineDataSet maxDataSet2 = new LineDataSet(maxEntries2, "Record");

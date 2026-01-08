@@ -40,11 +40,3 @@ public abstract class AppDatabase extends RoomDatabase {
 }
 
 
-//AppDatabase db = Room.databaseBuilder(
-//        context.getApplicationContext(),
-//        AppDatabase.class,
-//        "my_database"
-//).build();
-//
-//ProgressionDao progressionDao = db.progressionDao();
-//ProgressionEntryDao entryDao = db.progressionEntryDao();

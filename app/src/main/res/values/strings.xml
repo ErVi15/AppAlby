@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Tracker Progressioni</string>
+    <string name="app_name">FlowIt</string>
 
     <string name="action_settings">Info d\'uso</string>
 
@@ -8,7 +8,7 @@
     <string name="next">Next</string>
     <string name="previous">Resoconto</string>
     <string name="fab_add">Aggiungi elemento</string>
-    <string name="legenda">(Ogni pallino rappresenta un intervallo di 7 giorni.\nPer le info complete consulta i 3 puntini in alto a destra)</string>
+    <string name="legenda">(Ogni punto rappresenta un resoconto di sette giorni. L’andamento procede per intervalli di sette giorni alla volta.\nPer le info complete consulta \u22EE in alto a destra)</string>
 
     <string name="lorem_ipsum">
 Come vengono elaborati i dati:\n\n• Se si hanno piu entry in una giornata, verrà fatta la media\n(costanza piu importante di densita di valori in una giornata)\n\n• I dati vengono elaborati poi in blocco di 7 giorni alla volta\n(per studiare l andamento è buona pratica osservare un intervallo di tempo largo)\n\n• Per ogni blocco calcola il valore tipico (mediana aritmetica)\n(questo valore è piu resistente a picchi improvvisi, </string>

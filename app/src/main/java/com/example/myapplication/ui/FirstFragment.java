@@ -28,10 +28,6 @@ import com.example.myapplication.viewmodel.ProgressionViewModel;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textview.MaterialTextView;
 
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
-
 public class FirstFragment extends Fragment {
 
     private FragmentFirstBinding binding;

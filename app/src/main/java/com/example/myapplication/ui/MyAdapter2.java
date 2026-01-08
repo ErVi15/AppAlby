@@ -11,7 +11,6 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.myapplication.R;
-import com.example.myapplication.data.ProgressionEntry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +19,9 @@ import java.util.stream.Collectors;
 
 public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     static final int TYPE_DAY = 0;
-    static final int TYPE_NUMBER = 1;
-    //private MyAdapter2.OnItemButtonClickListener listener; //listener dinamico per il bottone Modifica che avrà ogni oggetto della lista
-    private List<ListItem> items;
+    private final List<ListItem> items;
 
-    private OnItemDeleteListener listener;
+    private final OnItemDeleteListener listener;
 
     private String u_misura;
     public MyAdapter2(Map<String, List<String>> map, OnItemDeleteListener listener) {
@@ -121,9 +118,6 @@ public class MyAdapter2 extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     }
 
 //questo non va usato nel modello architetturale mvvn: l'adapter non deve conoscere dati del repo. L'id lo conoscerà il viewmodel
-//    public interface OnItemDeleteListener {
-//        void onDeleteItem(long id);
-//    }
 
 
     static class DayViewHolder extends RecyclerView.ViewHolder {

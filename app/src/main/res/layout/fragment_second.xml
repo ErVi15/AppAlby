@@ -77,7 +77,7 @@
         android:id="@+id/emptyText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text='Premi il tasto + per aggiungerne dati.\n\n(Info sul funzionamento in "\u22EE" )'
+        android:text='Premi il tasto + per aggiungere dati.\nRicorda puoi impostare i tuoi obiettivi in "\u2699"\n\n(Info sul funzionamento in "\u22EE" )'
         android:textColor="@android:color/darker_gray"
         android:textSize="16sp"
         android:gravity="center"

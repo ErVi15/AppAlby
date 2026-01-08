@@ -1,6 +1,5 @@
 package com.example.myapplication.domain.stat;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
