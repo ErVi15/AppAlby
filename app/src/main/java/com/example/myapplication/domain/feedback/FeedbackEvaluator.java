@@ -2,6 +2,7 @@ package com.example.myapplication.domain.feedback;
 
 import com.example.myapplication.domain.stat.StatsCalculator;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,10 +20,13 @@ import java.util.TreeMap;
         public ProgressFeedback getFeedback(TreeMap<Date, List<String>> map, boolean is_second_last){
 
             TreeMap<Date, Integer> map_int=calculator.calculateMeanOfDays(calculator.cutLast7Days(map, is_second_last));
+            ArrayList<Integer> array_int=calculator.convertForMax(calculator.cutLast7Days(map, is_second_last));
 
             int median=calculator.calculateMedianOnMap(map_int);
             int active_days=calculator.calculateDays(map_int);
-            int week_max=calculator.calculateMax(map_int);
+
+            //va cambiato
+            int week_max=calculator.calculateMax(array_int);
 
             Date starting_day=null;
             if(map.size() !=0){
@@ -42,17 +46,19 @@ import java.util.TreeMap;
 
         public ArrayList<Integer[]> prepareDataForChart(TreeMap<Date, List<String>> map){
 
-            ArrayList<TreeMap<Date, Integer>> treeMapArrayList=new ArrayList<>();
-
+            ArrayList<TreeMap<Date, Integer>> array_of_mapInt=new ArrayList<>();
+            ArrayList<ArrayList<Integer>> array_of_arrayInt=new ArrayList<>();
             for(TreeMap<Date, List<String>> e: calculator.splitMapBy7Days2(map)){
-                treeMapArrayList.add(calculator.calculateMeanOfDays(e));
+                array_of_mapInt.add(calculator.calculateMeanOfDays(e));
+                array_of_arrayInt.add(calculator.convertForMax(e));
             }
 
             ArrayList<Integer[]> median_for_each_week=new ArrayList<>();
-            for( TreeMap<Date, Integer> f: treeMapArrayList){
-                median_for_each_week.add(new Integer[]{calculator.calculateMedianOnMap(f), calculator.calculateMax(f)});
 
+            for(int i=0; i<array_of_mapInt.size(); i++){
+                median_for_each_week.add(new Integer[]{calculator.calculateMedianOnMap(array_of_mapInt.get(i)), calculator.calculateMax(array_of_arrayInt.get(i))});
             }
+
             return median_for_each_week;
         }
 

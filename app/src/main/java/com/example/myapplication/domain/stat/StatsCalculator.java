@@ -2,6 +2,8 @@ package com.example.myapplication.domain.stat;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -41,45 +43,6 @@ public class StatsCalculator {
         return new TreeMap<>(map.subMap(from, false, to, true));
     }
 
-    public ArrayList<TreeMap<Date, List<String>>> splitMapBy7Days(TreeMap<Date, List<String>> map) {
-        ArrayList<TreeMap<Date, List<String>>> result = new ArrayList<>();
-        if (map.isEmpty()) return result; //se mappa è vuota return lista vuota
-
-        // lavoriamo a partire dall'ultima data inserita
-        NavigableMap<Date, List<String>> descendingMap = map.descendingMap();
-        Iterator<Map.Entry<Date, List<String>>> iter = descendingMap.entrySet().iterator(); //preparo un iterator che contiene i dati della lista ribaltata (cosi gli intervalli partono a ritroso)
-
-        while (iter.hasNext()) { //finche l'iterator ha element
-            TreeMap<Date, List<String>> intervalMap = new TreeMap<>(); //mappa d'appoggio che conterrà l'intervallo ritagliato
-            Map.Entry<Date, List<String>> lastEntry = iter.next(); //prendo l'ultimo elemento
-            Date intervalEnd = lastEntry.getKey(); //ricavo la chiave/data
-            intervalMap.put(intervalEnd, lastEntry.getValue()); //la inserisco come primo elemento della mappa d'appoggio
-
-            Calendar cal = Calendar.getInstance();
-            cal.setTime(intervalEnd);
-            cal.add(Calendar.DAY_OF_MONTH, -6); // intervallo di 7 giorni
-            Date intervalStart = cal.getTime();
-
-            // raccogli le date dentro l'intervallo
-            while (iter.hasNext()) {
-                Map.Entry<Date, List<String>> entry = iter.next();
-                Date date = entry.getKey();
-
-                if (!date.before(intervalStart)) {
-                    intervalMap.put(date, entry.getValue());
-                } else {
-                    if(intervalMap.isEmpty()){
-                        intervalMap.put(intervalEnd, new ArrayList<>(List.of("0")));
-                    }
-                    break; // esci, questa data sarà per il prossimo intervallo
-                }
-            }
-
-            result.add(intervalMap);
-        }
-
-        return result;
-    }
 
     public ArrayList<TreeMap<Date, List<String>>> splitMapBy7Days2(TreeMap<Date, List<String>> map) {
         ArrayList<TreeMap<Date, List<String>>> result = new ArrayList<>();
@@ -187,18 +150,22 @@ public class StatsCalculator {
 
     }
 
-    public Integer calculateMax(TreeMap<Date, Integer> map){
-        return max_value_of_list(new ArrayList<>(map.values()));
+
+    public ArrayList<Integer> convertForMax(TreeMap<Date, List<String>> map){
+        //dal più vecchio al più recente
+        ArrayList<Integer> output=new ArrayList<>();
+        for (Map.Entry<Date, List<String>> e : map.entrySet()) {
+            for (String s : e.getValue()) {
+                output.add(Integer.parseInt(s));
+            }
+        }
+        return output;
     }
 
 
-
-
-
-
-
-
-
+    public Integer calculateMax(ArrayList<Integer> map){
+        return max_value_of_list(map);
+    }
 
 
 //FUNCTIONS ON VALUES
