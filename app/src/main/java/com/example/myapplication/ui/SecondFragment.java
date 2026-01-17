@@ -191,20 +191,44 @@ public class SecondFragment extends Fragment {
                     .setTitle("Impostazioni")
                     .setView(alertView)
                     .setPositiveButton("OK", (dialog, which) -> {
+                        String input1=valore_desiderato.getText().toString();
+                        String input2=costanza_desiderata.getText().toString();
+
+
                         try{
-                            int obb_val_tipico = Integer.parseInt(valore_desiderato.getText().toString());
-                            int obb_soglia = Integer.parseInt(costanza_desiderata.getText().toString());
+                            if(input1.isEmpty()){
+                                int obb_soglia = Integer.parseInt(input2);
+                                this.viewModel.setCostanzaDesiderata(obb_soglia);
+                                this.viewModel.updateProgression();
+                                Toast.makeText(requireContext(),
+                                        "Impostato obbiettivo: Costanza",
+                                        Toast.LENGTH_SHORT).show();
 
-                            // Passo tutto al viewModel
-                            this.viewModel.setCostanzaDesiderata(obb_soglia);
-                            this.viewModel.setValoreDesiderato(obb_val_tipico);
-                            this.viewModel.updateProgression();
+                            } else if (input2.isEmpty()){
+                                int obb_val_tipico = Integer.parseInt(input1);
+                                this.viewModel.setValoreDesiderato(obb_val_tipico);
+                                this.viewModel.updateProgression();
+                                Toast.makeText(requireContext(),
+                                        "Impostato obbiettivo: Valore tipico",
+                                        Toast.LENGTH_SHORT).show();
 
+                            } else {
+                                int obb_val_tipico = Integer.parseInt(input1);
+                                int obb_soglia = Integer.parseInt(input2);
+                                // Passo tutto al viewModel
+                                this.viewModel.setValoreDesiderato(obb_val_tipico);
+                                this.viewModel.setCostanzaDesiderata(obb_soglia);
 
+                                this.viewModel.updateProgression();
+                                Toast.makeText(requireContext(),
+                                        "Impostati obiettivi",
+                                        Toast.LENGTH_SHORT).show();
+
+                            }
                         } catch (NumberFormatException e) {
-                            Toast.makeText(requireContext(),
-                                    "Valore non valido (inserisci numeri interi)",
-                                    Toast.LENGTH_SHORT).show();
+                                Toast.makeText(requireContext(),
+                                        "Valori non validi (controlla siano numeri interi)",
+                                        Toast.LENGTH_SHORT).show();
                         }
                     })
                     .setNegativeButton("Annulla", (dialog, which) -> dialog.cancel())

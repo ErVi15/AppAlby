@@ -6,7 +6,7 @@ public enum ProgressState {
     STONKS("Stai spingendo e assimilando il tuo livello abituale, stai ampliando il tuo potenziale", "Suggerimento: continua così"),//DX>0, DM>0
     EMERGENTE("Spesso mostri margine di miglioramento, ma resti stabile","Suggerimento: è il momento per fare definitivamente tuoi questi record, concentrati sulla stabilità del tuo andamento"),//DX>0, DM CIRCA 0
     CONFORT_ZONE("Performance stabile","Suggerimento: ottimo, sei perfettamente a tuo agio! Se vuoi evolvere, prova delle variazioni, nuovi stimoli."),//DX CIRCA 0, DM CIRCA 0
-    ALTALENANTE("Stai mostrando rogressi alterni","Suggerimento: cerca di lavorare tutti i giorni con lo stesso effort"),//DX>0, DM CIRCA 0
+    ALTALENANTE("Stai mostrando progressi alterni","Suggerimento: cerca di lavorare tutti i giorni con lo stesso effort"),//DX>0, DM CIRCA 0
     IN_CALO("Stai mostrando un calo temporaneo, ma il tuo potenziale rimane","Suggerimento: Rallenta un po’ e cura la costanza. Ricorda che un singolo intervallo negativo non cambia il trend"),//DX<0, DM<0
     RIPRESA_DOPO_PAUSA("I dati recenti seguono un periodo di inattività.","Suggerimento: inserire dati almeno per un giorno per cambiare resoconto"),
     AGGIUNGI_ALTRI_GIORNI("Hai iniziato da poco, i dati iniziali non definiscono ancora un trend", "Suggerimento: fai passare almeno 7 giorni dal primo valore inserito"),
